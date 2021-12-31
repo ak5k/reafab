@@ -152,7 +152,7 @@ void ProcessSaturn2(int command, int val, int index, MediaTrack* track)
     previousBand[fx_guid] = band;
     std::string targetString("Band ");
     targetString = targetString + std::to_string(band) + std::string(" ");
-    int targetParamIndex {-1};
+    // int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = targetString + std::string("Drive");
@@ -233,7 +233,7 @@ void ProcessProDS(int command, int val, int index, MediaTrack* track)
     char bufOut[64] {0};
     double paramValue = 0.0;
     std::string targetString {""};
-    int targetParamIndex {-1};
+    // int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = std::string("Threshold");
@@ -308,7 +308,7 @@ void ProcessProL2(int command, int val, int index, MediaTrack* track)
     char bufOut[64] {0};
     double paramValue = 0.0;
     std::string targetString {""};
-    int targetParamIndex {-1};
+    // int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = std::string("Gain");
@@ -385,7 +385,7 @@ void ProcessProC2(int command, int val, int index, MediaTrack* track)
     char bufOut[64] {0};
     double paramValue = 0.0;
     std::string targetString {""};
-    int targetParamIndex {-1};
+    // int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = std::string("Threshold");
@@ -466,7 +466,7 @@ void ProcessProG(int command, int val, int index, MediaTrack* track)
     char bufOut[64] {0};
     double paramValue = 0.0;
     std::string targetString {""};
-    int targetParamIndex {-1};
+    // int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = std::string("Threshold");
@@ -563,7 +563,7 @@ void ProcessProQ3(int command, int val, int index, MediaTrack* track)
     previousBand[fx_guid] = band;
     std::string targetString("Band ");
     targetString = targetString + std::to_string(band) + std::string(" ");
-    int targetParamIndex {-1};
+    // int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = targetString + std::string("Frequency");
@@ -698,7 +698,7 @@ void ProcessCommand(int command, int val)
         (void)val;
         currentPlugin = command - 24 - 1;
         ProcessInput();
-        if (pluginIndices.size() > currentPlugin) {
+        if ((int)pluginIndices.size() > currentPlugin) {
             ProcessPlugin(command, val, pluginIndices[currentPlugin]);
             if (TrackFX_GetOpen(
                     GetSelectedTrack2(0, 0, true),
@@ -723,7 +723,7 @@ void ProcessCommand(int command, int val)
     }
     if (command < 25 && currentPlugin != -1) {
         ProcessInput();
-        if (pluginIndices.size() > currentPlugin) {
+        if ((int)pluginIndices.size() > currentPlugin) {
             ProcessPlugin(command, val, pluginIndices[currentPlugin]);
         }
     }
