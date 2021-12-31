@@ -50,7 +50,6 @@ void ProcessProMB(int command, int val, int index, MediaTrack* track)
     previousBand[fx_guid] = band;
     std::string targetString("Band ");
     targetString = targetString + std::to_string(band) + std::string(" ");
-    int targetParamIndex {-1};
 
     if (command == 1) {
         targetString = targetString + std::string("Threshold");
@@ -87,7 +86,7 @@ void ProcessProMB(int command, int val, int index, MediaTrack* track)
     //     }
     // }
 
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -189,7 +188,7 @@ void ProcessSaturn2(int command, int val, int index, MediaTrack* track)
         }
     }
 
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -266,7 +265,7 @@ void ProcessProDS(int command, int val, int index, MediaTrack* track)
     if (command == 20) {
         targetString = std::string("Lookahead Enabled");
     }
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -343,7 +342,7 @@ void ProcessProL2(int command, int val, int index, MediaTrack* track)
     if (command == 19) {
         targetString = std::string("Unity Gain");
     }
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -423,7 +422,7 @@ void ProcessProC2(int command, int val, int index, MediaTrack* track)
     if (command == 19) {
         targetString = std::string("Auto Gain");
     }
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -503,7 +502,7 @@ void ProcessProG(int command, int val, int index, MediaTrack* track)
             val = -1;
         }
     }
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -600,7 +599,7 @@ void ProcessProQ3(int command, int val, int index, MediaTrack* track)
         }
     }
 
-    for (size_t i = 0; i < TrackFX_GetNumParams(track, index); i++) {
+    for (int i = 0; i < TrackFX_GetNumParams(track, index); i++) {
         TrackFX_GetParamName(track, index, i, bufOut, 64);
         std::string paramName(bufOut);
         if (paramName.compare(targetString) == 0) {
@@ -677,7 +676,7 @@ void ProcessInput()
     char bufOut[64] {0};
 
     // find fx indices for supported plugins based on names
-    for (size_t i = 0; i < fx_count; i++) {
+    for (int i = 0; i < fx_count; i++) {
         TrackFX_GetFXName(track, i, bufOut, 64);
         std::string fx_name(bufOut);
         if (fx_name.find(std::string("FabFilter")) != std::string::npos) {
@@ -762,7 +761,7 @@ bool OnAction(
 void RegisterReaFab()
 {
     auto count = 8;
-    for (size_t i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         std::string commandStr {"AK5K_REAFAB"};
         std::string actionStr {"ReaFab Encoder "};
         commandStr = commandStr + std::to_string(i);
@@ -773,7 +772,7 @@ void RegisterReaFab()
         actions[commandId] = i + 1;
     }
 
-    for (size_t i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         std::string commandStr {"AK5K_REAFAB"};
         std::string actionStr {"ReaFab Encoder Push "};
         commandStr = commandStr + std::to_string(i + count);
@@ -785,7 +784,7 @@ void RegisterReaFab()
     }
 
     count = 16;
-    for (size_t i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
         std::string commandStr {"AK5K_REAFAB"};
         std::string actionStr {"ReaFab Button "};
         commandStr = commandStr + std::to_string(i + count);
