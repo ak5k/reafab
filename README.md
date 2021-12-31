@@ -6,7 +6,7 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 
 ![image](https://i.imgur.com/vR1ljy8.gif)
 
-| Ctrl | Q3         | G       | C2      | L2    | MB      | Saturn2 | all |
+| Ctrl | Pro-Q3     | Pro-G   | Pro-C2  | Pro-L2| Pro-MB  | Saturn2 | all |
 |------|----        |---      |----     |----   |----     |-----    | --- |
 | Enc1 | band freq  | thr     | thr     |gain   |b thr    |drive    |
 | Enc2 | band gain  | rat     | rat     |output |b rat    |dyn      |
