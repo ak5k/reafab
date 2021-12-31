@@ -4,6 +4,8 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 
 [More information](https://forum.cockos.com/showthread.php?t=261330)
 
+![image](https://i.imgur.com/vR1ljy8.gif)
+
 | Ctrl | Q3         | G       | C2      | L2    | MB      | Saturn2 | all |
 |------|----        |---      |----     |----   |----     |-----    | --- |
 | Enc1 | band freq  | thr     | thr     |gain   |b thr    |drive    |
@@ -38,3 +40,4 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 | Enp6 |            |   |    |    |         |
 | Enp7 |            |   |    |    |         |
 | Enp8 |            |   |    |    |         |
+
