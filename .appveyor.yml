@@ -8,8 +8,8 @@ build_script:
   - cmake -B build -DCMAKE_BUILD_TYPE=Release
     -DVCPKG_TARGET_TRIPLET=$TRIPLET -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN
     -DCMAKE_OSX_ARCHITECTURES=$ARCH -DCMAKE_OSX_DEPLOYMENT_TARGET=$DEPLOY_TARGET
-  - cmake --build build --target reaper_reablink
-  - '[ "$ARCH" != `uname -m` ] || cmake --build build --target reaper_reablink'
+  - cmake --build build --target reaper_reafab
+  - '[ "$ARCH" != `uname -m` ] || cmake --build build --target reaper_reafab'
 
 for:
   - matrix: { only: [appveyor_build_worker_image: &linux Ubuntu] }
@@ -56,7 +56,7 @@ for:
         ;;
       esac
     artifacts:
-      - path: build/reaper_reablink*.so
+      - path: build/reaper_reafab*.so
 
   - matrix:
       {
@@ -81,7 +81,7 @@ for:
       # https://letsencrypt.org/docs/dst-root-ca-x3-expiration-september-2021/
       - sudo curl -k https://curl.se/ca/cacert.pem -o /etc/ssl/cert.pem
     artifacts:
-      - path: build/reaper_reablink*.dylib
+      - path: build/reaper_reafab*.dylib
 
   - matrix: { only: [appveyor_build_worker_image: &windows Visual Studio 2022] }
     cache:
@@ -97,8 +97,7 @@ for:
         -DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake
       - cmake --build build
     artifacts:
-      - path: build\reaper_reablink*.dll
-      - path: scripts\ReaBlink_Monitor.lua
+      - path: build\reaper_reafab*.dll
 
 environment:
   matrix:
