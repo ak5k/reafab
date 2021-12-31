@@ -8,8 +8,8 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 |------|----        |---      |----     |----   |----     |-----    | --- |
 | Enc1 | band freq  | thr     | thr     |gain   |b thr    |drive    |
 | Enc2 | band gain  | rat     | rat     |output |b rat    |dyn      |
-| Enc3 | band Q     | att     | att     |att    |b att    |cross    |
-| Enc4 | band DR    | rel     | rel     |rel    |b rel    |level    |
+| Enc3 | band q     | att     | att     |att    |b att    |cross    |
+| Enc4 | band dr    | rel     | rel     |rel    |b rel    |level    |
 | Enc5 | band thr   | hold    | hold    |link tr|b knee   |mix      |
 | Enc6 |            | knee    | knee    |lin rel|b range  |         |
 | Enc7 |            | range   | dry     |looka  |b cross  |         |
