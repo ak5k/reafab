@@ -24,20 +24,19 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 | B6   | next slope |         |         |       |         |         |
 | B7   |            |         |         |       |         |dec bands|
 | B8   |            |         |         |       |         |inc bands|
-| B9   |            |         |         |       |         |         |plugin1
-| B10  |            |         |         |       |         |         |plugin2
-| B11  |            |         |         |       |         |         |plugin3
-| B12  |            |         |         |       |         |         |plugin4
-| B13  |            |         |         |       |         |         |plugin5
-| B14  |            |         |         |       |         |         |plugin6
-| B15  |            |         |         |       |         |         |plugin7
-| B16  |            |         |         |       |         |         |plugin8
-| Enp1 |            |   |    |    |         |
-| Enp2 |            |   |    |    |         |
+| Enp1 | enable band |   |    |    |         |
+| Enp2 | invert gain    |   |    |    |         |
 | Enp3 |            |   |    |    |         |
 | Enp4 |            |   |    |    |         |
 | Enp5 |            |   |    |    |         |
 | Enp6 |            |   |    |    |         |
 | Enp7 |            |   |    |    |         |
 | Enp8 |            |   |    |    |         |
-
+| B9   |            |         |         |       |         |         |1st supported plugin
+| B10  |            |         |         |       |         |         |2nd supported plugin
+| B11  |            |         |         |       |         |         |3rd supported plugin
+| B12  |            |         |         |       |         |         | . 
+| B13  |            |         |         |       |         |         | . 
+| B14  |            |         |         |       |         |         | . 
+| B15  |            |         |         |       |         |         | . 
+| B16  |            |         |         |       |         |         |8th supported plugin
