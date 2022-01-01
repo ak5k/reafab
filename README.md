@@ -16,6 +16,14 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 | Enc6 |            | knee    | knee    |lin rel|b range  |         |
 | Enc7 |            | range   | dry     |looka  |b cross  |         |
 | Enc8 |            |         | wet     |       |b level  |         |
+| Enp1 | enable band |   |    |    |         |
+| Enp2 | invert gain    |   |    |    |         |
+| Enp3 |            |   |    |    |         |
+| Enp4 |            |   |    |    |         |
+| Enp5 |            |   |    |    |         |
+| Enp6 |            |   |    |    |         |
+| Enp7 |            |   |    |    |         |
+| Enp8 |            |   |    |    |         |
 | B1   | prev band  | p style | p style |p style|p band   |p band   |
 | B2   | next band  | n style | n style |n style|n band   |n band   |
 | B3   | prev shape |         | auto g  |unity g|dyn mode |p style  |
@@ -32,11 +40,3 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 | B14  |            |         |         |       |         |         | . 
 | B15  |            |         |         |       |         |         | . 
 | B16  |            |         |         |       |         |         |8th supported plugin
-| Enp1 | enable band |   |    |    |         |
-| Enp2 | invert gain    |   |    |    |         |
-| Enp3 |            |   |    |    |         |
-| Enp4 |            |   |    |    |         |
-| Enp5 |            |   |    |    |         |
-| Enp6 |            |   |    |    |         |
-| Enp7 |            |   |    |    |         |
-| Enp8 |            |   |    |    |         |
