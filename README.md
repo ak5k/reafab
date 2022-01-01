@@ -24,14 +24,6 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 | B6   | next slope |         |         |       |         |         |
 | B7   |            |         |         |       |         |dec bands|
 | B8   |            |         |         |       |         |inc bands|
-| Enp1 | enable band |   |    |    |         |
-| Enp2 | invert gain    |   |    |    |         |
-| Enp3 |            |   |    |    |         |
-| Enp4 |            |   |    |    |         |
-| Enp5 |            |   |    |    |         |
-| Enp6 |            |   |    |    |         |
-| Enp7 |            |   |    |    |         |
-| Enp8 |            |   |    |    |         |
 | B9   |            |         |         |       |         |         |1st supported plugin
 | B10  |            |         |         |       |         |         |2nd supported plugin
 | B11  |            |         |         |       |         |         |3rd supported plugin
@@ -40,3 +32,11 @@ Registers dedicated custom actions in REAPER for MIDI CC Relative1 input to cont
 | B14  |            |         |         |       |         |         | . 
 | B15  |            |         |         |       |         |         | . 
 | B16  |            |         |         |       |         |         |8th supported plugin
+| Enp1 | enable band |   |    |    |         |
+| Enp2 | invert gain    |   |    |    |         |
+| Enp3 |            |   |    |    |         |
+| Enp4 |            |   |    |    |         |
+| Enp5 |            |   |    |    |         |
+| Enp6 |            |   |    |    |         |
+| Enp7 |            |   |    |    |         |
+| Enp8 |            |   |    |    |         |
