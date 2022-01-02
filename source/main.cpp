@@ -1,5 +1,6 @@
 #include <cmath>
 #include <map>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -15,16 +16,18 @@
 #define REAPERAPI_WANT_TrackFX_GetParam
 #define REAPERAPI_WANT_TrackFX_GetParamName
 #define REAPERAPI_WANT_TrackFX_GetParameterStepSizes
-#define REAPERAPI_WANT_TrackFX_Show
 #define REAPERAPI_WANT_TrackFX_SetParam
+#define REAPERAPI_WANT_TrackFX_Show
+#define REAPERAPI_WANT_plugin_getapi
 #define REAPERAPI_WANT_plugin_register
 #endif
 #define REAPERAPI_IMPLEMENT
 #include <reaper_plugin_functions.h>
 
-std::map<int, int> actions;
 std::map<GUID*, int> previousBand;
+std::map<int, int> actions;
 std::map<int, std::string> controlMap;
+std::mutex m;
 std::vector<int> FXIndices;
 
 char bufOut[BUFSIZ] {0};
@@ -191,6 +194,9 @@ void SetReaXcomp(int command, int val, int index, MediaTrack* track)
     controlMap[21] = targetParam + std::string("FeedBk");
     controlMap[22] = targetParam + std::string("Active");
 
+    controlMap[17] = std::string("Previous Band");
+    controlMap[18] = std::string("Next Band");
+
     SetTargetFXParam(track, index, command, val);
     return;
 }
@@ -231,6 +237,9 @@ void SetProMB(int command, int val, int index, MediaTrack* track)
     controlMap[8] = targetParam + std::string("Level");
     controlMap[19] = targetParam + std::string("Dynamics Mode");
 
+    controlMap[17] = std::string("Previous Band");
+    controlMap[18] = std::string("Next Band");
+
     SetTargetFXParam(track, index, command, val);
     return;
 }
@@ -266,15 +275,27 @@ void SetSaturn2(int command, int val, int index, MediaTrack* track)
     controlMap[3] = targetParam + std::string("Crossover Frequency");
     controlMap[7] = targetParam + std::string("Level");
     controlMap[8] = targetParam + std::string("Mix");
-    controlMap[18] = targetParam + std::string("Band Processing");
+
     controlMap[19] = targetParam + std::string("Style");
     controlMap[20] = targetParam + std::string("Style");
+
+    controlMap[21] = targetParam + std::string("Band Processing");
+
     controlMap[23] = std::string("Num Active Bands");
     controlMap[24] = std::string("Num Active Bands");
+
+    controlMap[17] = std::string("Previous Band");
+    controlMap[18] = std::string("Next Band");
 
     if (command == 19 || command == 20) {
         val = 1;
         if (command == 19) {
+            val = -1;
+        }
+    }
+    if (command == 17 || command == 18) {
+        val = 1;
+        if (command == 18) {
             val = -1;
         }
     }
@@ -320,12 +341,6 @@ void SetProL2(int command, int val, int index, MediaTrack* track)
     controlMap[18] = std::string("Style");
     controlMap[19] = std::string("Unity Gain");
 
-    if (command == 17 || command == 18) {
-        val = 1;
-        if (command == 17) {
-            val = -1;
-        }
-    }
     if (command == 17 || command == 18) {
         val = 1;
         if (command == 17) {
@@ -448,12 +463,13 @@ void SetProQ3(int command, int val, int index, MediaTrack* track)
     controlMap[3] = targetParam + std::string("Q");
     controlMap[4] = targetParam + std::string("Dynamic Range");
     controlMap[5] = targetParam + std::string("Threshold");
-    // controlMap[17] = targetParam + std::string("Used");
-    // controlMap[18] = targetParam + std::string("Used");
     controlMap[19] = targetParam + std::string("Shape");
     controlMap[20] = targetParam + std::string("Shape");
     controlMap[21] = targetParam + std::string("Slope");
     controlMap[22] = targetParam + std::string("Slope");
+
+    controlMap[17] = std::string("Previous Band");
+    controlMap[18] = std::string("Next Band");
 
     controlMap[9] = targetParam + std::string("Used");
     controlMap[10] = targetParam + std::string("Gain");
@@ -511,6 +527,9 @@ void SetReEQ(int command, int val, int index, MediaTrack* track)
 
     controlMap[9] = targetParam + std::string("Mode");
     controlMap[10] = targetParam + std::string("Gain");
+
+    controlMap[17] = std::string("Previous Band");
+    controlMap[18] = std::string("Next Band");
 
     if (command == 19 || command == 20) {
         val = 1;
@@ -627,28 +646,31 @@ void ShowTrackFXChain()
 
 void ProcessCommand(int command, int val)
 {
-    ProcessInput();
-    if (command > 24) {
-        (void)val;
-        currentFXindex = command - 24 - 1;
-        if (FXIndices.size() > currentFXindex) {
-            // SetFX(command, val, FXIndices[currentFXindex]);
-            ShowTrackFXChain();
-        }
-        return;
-    }
-    else {
-        if (FXIndices.size() > currentFXindex) {
-            if (GetSelectedTrack2(0, 0, true) != prevTrack) {
-                prevTrack = GetSelectedTrack2(0, 0, true);
-                if (!hidden) {
-                    TrackFX_Show(
-                        GetSelectedTrack2(0, 0, true),
-                        FXIndices[currentFXindex],
-                        1);
-                }
+    if (command < 33) {
+        std::scoped_lock<std::mutex> lock {m};
+        ProcessInput();
+        if (command > 24) {
+            (void)val;
+            currentFXindex = command - 24 - 1;
+            if (FXIndices.size() > currentFXindex) {
+                // SetFX(command, val, FXIndices[currentFXindex]);
+                ShowTrackFXChain();
             }
-            SetFX(command, val, FXIndices[currentFXindex]);
+            return;
+        }
+        else {
+            if (FXIndices.size() > currentFXindex) {
+                if (GetSelectedTrack2(0, 0, true) != prevTrack) {
+                    prevTrack = GetSelectedTrack2(0, 0, true);
+                    if (!hidden) {
+                        TrackFX_Show(
+                            GetSelectedTrack2(0, 0, true),
+                            FXIndices[currentFXindex],
+                            1);
+                    }
+                }
+                SetFX(command, val, FXIndices[currentFXindex]);
+            }
         }
     }
     return;
@@ -673,9 +695,15 @@ bool OnAction(
     return true;
 }
 
-void RegisterReaFab()
+void RegisterReaFab(bool load)
 {
     auto count = 8;
+    std::string regAction {"custom_action"};
+
+    if (!load) {
+        regAction = std::string {"-"} + regAction;
+    }
+
     for (int i = 0; i < count; i++) {
         std::string commandStr {"AK5K_REAFAB"};
         std::string actionStr {"ReaFab Encoder "};
@@ -683,7 +711,7 @@ void RegisterReaFab()
         actionStr = actionStr + std::to_string(i + 1);
         custom_action_register_t action =
             {0, commandStr.c_str(), actionStr.c_str(), NULL};
-        auto commandId = plugin_register("custom_action", &action);
+        auto commandId = plugin_register(regAction.c_str(), &action);
         actions[commandId] = i + 1;
     }
 
@@ -694,7 +722,7 @@ void RegisterReaFab()
         actionStr = actionStr + std::to_string(i + 1);
         custom_action_register_t action =
             {0, commandStr.c_str(), actionStr.c_str(), NULL};
-        auto commandId = plugin_register("custom_action", &action);
+        auto commandId = plugin_register(regAction.c_str(), &action);
         actions[commandId] = i + count + 1;
     }
 
@@ -706,7 +734,7 @@ void RegisterReaFab()
         actionStr = actionStr + std::to_string(i + 1);
         custom_action_register_t action =
             {0, commandStr.c_str(), actionStr.c_str(), NULL};
-        auto commandId = plugin_register("custom_action", &action);
+        auto commandId = plugin_register(regAction.c_str(), &action);
         actions[commandId] = i + count + 1;
     }
 
@@ -715,13 +743,109 @@ void RegisterReaFab()
     return;
 }
 
+#define REAIMGUIAPI_IMPLEMENT
+#include "reaper_imgui_functions.h"
+
+static int g_actionId;
+static ImGui_Context* g_ctx;
+
+static void frame()
+{
+    std::scoped_lock<std::mutex> lock {m};
+    if (ImGui_BeginTable(g_ctx, "table1", 9)) {
+        for (int row = 0; row < 4; row++) {
+            ImGui_TableNextRow(g_ctx);
+            for (int column = 0; column < 9; column++) {
+                ImGui_TableSetColumnIndex(g_ctx, column);
+                std::string text = controlMap[row * 8 + column];
+                if (controlMap[row * 8 + column].empty()) {
+                    text = std::string("");
+                }
+                if (column == 0) {
+                    if (row == 0) {
+                        text = std::string("enc1-8: ");
+                    }
+                    if (row == 1) {
+                        text = std::string("encp1-8: ");
+                    }
+                    if (row == 2) {
+                        text = std::string("b1-8: ");
+                    }
+                }
+                ImGui_Text(g_ctx, text.c_str());
+            }
+        }
+        // ImGui_TableNextRow(g_ctx);
+        ImGui_TableSetColumnIndex(g_ctx, 0);
+        std::string text = "b9-16: ";
+        ImGui_Text(g_ctx, text.c_str());
+        for (int column = 1; column < 9; column++) {
+            ImGui_TableSetColumnIndex(g_ctx, column);
+            text = std::string("fx") + std::to_string(column);
+            ImGui_Text(g_ctx, text.c_str());
+        }
+        ImGui_EndTable(g_ctx);
+    }
+}
+
+static void loop()
+{
+    if (!g_ctx)
+        g_ctx = ImGui_CreateContext("ReaFab");
+
+    int cond {ImGui_Cond_FirstUseEver};
+    ImGui_SetNextWindowSize(g_ctx, 800, 30, &cond);
+
+    bool open {true};
+    if (ImGui_Begin(g_ctx, "ReaFab Monitor", &open)) {
+        frame();
+        ImGui_End(g_ctx);
+    }
+
+    if (!open || !ImGui_ValidatePtr(g_ctx, "ImGui_Context*")) {
+        plugin_register("-timer", reinterpret_cast<void*>(&loop));
+        ImGui_DestroyContext(g_ctx);
+        g_ctx = nullptr;
+    }
+}
+
+static bool commandHook(
+    KbdSectionInfo* sec,
+    const int command,
+    const int val,
+    const int valhw,
+    const int relmode,
+    HWND hwnd)
+{
+    (void)sec;
+    (void)val;
+    (void)valhw;
+    (void)relmode;
+    (void)hwnd; // unused
+
+    if (command == g_actionId) {
+        if (!g_ctx)
+            plugin_register("timer", reinterpret_cast<void*>(&loop));
+        return true;
+    }
+
+    return false;
+}
+
 extern "C" {
 REAPER_PLUGIN_DLL_EXPORT int ReaperPluginEntry(
     REAPER_PLUGIN_HINSTANCE hInstance,
     reaper_plugin_info_t* rec)
 {
     (void)hInstance;
+    custom_action_register_t action {
+        0,
+        "AK5K_REAFAB_MONITOR",
+        "ReaFab Monitor"};
     if (!rec) {
+        plugin_register("-hookcommand2", reinterpret_cast<void*>(&commandHook));
+        plugin_register("-custom_action", &action);
+        RegisterReaFab(false);
         return 0;
     }
     else if (
@@ -729,7 +853,12 @@ REAPER_PLUGIN_DLL_EXPORT int ReaperPluginEntry(
         REAPERAPI_LoadAPI(rec->GetFunc)) {
         return 0;
     }
-    RegisterReaFab();
+    RegisterReaFab(true);
+    plugin_getapi = reinterpret_cast<decltype(plugin_getapi)>(
+        rec->GetFunc("plugin_getapi")); // used by reaper_imgui_functions.h
+
+    g_actionId = plugin_register("custom_action", &action);
+    plugin_register("hookcommand2", reinterpret_cast<void*>(&commandHook));
     return 1;
 }
 }
