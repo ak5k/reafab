@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16.0)
 project(reaper_reafab VERSION 0.3.7 LANGUAGES CXX)
 
-include(CheckCompilerFlag)
-include(CheckIncludeFileCXX)
-include(CheckLinkerFlag)
+# include(CheckCompilerFlag)
+# include(CheckIncludeFileCXX)
+# include(CheckLinkerFlag)
 
 # set up reaper-sdk and WDL
 if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
@@ -63,7 +63,7 @@ if(VCPKG_TOOLCHAIN)
   set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release)
 endif()
 
-if(WIN32)
+if(WIN32 AND CMAKE_BUILD_TYPE MATCHES Release)
   foreach(arg
     CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG
     CMAKE_C_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELEASE
@@ -103,14 +103,14 @@ if(WIN32)
   )
 else()
   add_compile_options(
-    -fsigned-char -fstack-protector-strong -fdiagnostics-color
+    -fsigned-char -fstack-protector-strong
   )
 
   if(APPLE)
     add_link_options(-Wl,-dead_strip)
   endif()
 
-  check_linker_flag(CXX -Wl,--no-undefined HAVE_NO_UNDEFINED)
+  # check_linker_flag(CXX -Wl,--no-undefined HAVE_NO_UNDEFINED)
   if(HAVE_NO_UNDEFINED)
     add_link_options(-Wl,--no-undefined)
   endif()
@@ -118,51 +118,60 @@ endif()
 
 add_library(common INTERFACE)
 target_include_directories(
-    common INTERFACE
+    common SYSTEM INTERFACE
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/vendor
     ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
 
+# include_directories(
+#     SYSTEM
+#     ${CMAKE_SOURCE_DIR}/include
+#     ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
+
+add_library(${PROJECT_NAME} SHARED)
+add_subdirectory(${CMAKE_SOURCE_DIR}/source)
+target_link_libraries(${PROJECT_NAME} reafab)
+
 if(WIN32)
-  target_compile_options(common INTERFACE
-    /W3 /WX /wd4244 /wd4267 /wd4312 /wd4996 /wd5208)
+  target_compile_options(common SYSTEM INTERFACE
+    /W4 /wd4100 /wd4505 /wd2220 /wd4706
+# /WX
+  )
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
 else()
-  target_compile_options(common INTERFACE
-    -Wall -Wextra -Werror
-    -Wno-unused-parameter -Wno-missing-field-initializers
-    -Wno-unused-function -Wno-missing-braces
+  target_compile_options(reafab PRIVATE
+    -Wall -Wextra -Werror -Wpedantic
+    # -Wno-unused-parameter -Wno-missing-field-initializers
+    # -Wno-unused-function -Wno-missing-braces
   )
 
   # Clang 11
-  check_compiler_flag(CXX -Wnon-c-typedef-for-linkage HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
-  if(HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
-    target_compile_options(common INTERFACE -Wno-non-c-typedef-for-linkage)
-  endif()
+  # check_compiler_flag(CXX -Wnon-c-typedef-for-linkage HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
+  # if(HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
+  #   target_compile_options(common INTERFACE -Wno-non-c-typedef-for-linkage)
+  # endif()
 endif()
 
-check_include_file_cxx(optional HAS_STD_OPTIONAL)
-if(HAS_STD_OPTIONAL)
-  target_compile_definitions(common INTERFACE HAS_STD_OPTIONAL)
-endif()
+# # check_include_file_cxx(optional HAS_STD_OPTIONAL)
+# if(HAS_STD_OPTIONAL)
+#   target_compile_definitions(common INTERFACE HAS_STD_OPTIONAL)
+# endif()
 
-check_include_file_cxx(variant HAS_STD_VARIANT)
-if(HAS_STD_VARIANT)
-  target_compile_definitions(common INTERFACE HAS_STD_VARIANT)
-endif()
+# # check_include_file_cxx(variant HAS_STD_VARIANT)
+# if(HAS_STD_VARIANT)
+#   target_compile_definitions(common INTERFACE HAS_STD_VARIANT)
+# endif()
 
-add_library(${PROJECT_NAME} SHARED)
 set_target_properties(${PROJECT_NAME} PROPERTIES
   PREFIX "" # disable the "lib" prefix
   OUTPUT_NAME "reaper_reafab-${ARCH_NAME}"
 )
 set(REAPER_USER_PLUGINS "UserPlugins")
+
 install(TARGETS ${PROJECT_NAME}
+  CONFIGURATIONS Debug Release
   RUNTIME DESTINATION "${REAPER_USER_PLUGINS}" # Windows .dll
   LIBRARY DESTINATION "${REAPER_USER_PLUGINS}" # Linux .so/macOS .dylib
 )
-add_subdirectory(${CMAKE_SOURCE_DIR}/source)
-target_link_libraries(${PROJECT_NAME} reafab)
 
 if(UNIX AND NOT APPLE)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -170,11 +179,11 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(${PROJECT_NAME} Threads::Threads)
 endif()
 
-if (MSVC)
+if (MSVC AND CMAKE_BUILD_TYPE MATCHES RELEASE)
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR} )
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR} )
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_CURRENT_BINARY_DIR} )
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_BINARY_DIR} )
     # etc for the other available configuration types (MinSizeRel, RelWithDebInfo)
-endif (MSVC)
+endif ()
