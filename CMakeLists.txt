@@ -140,10 +140,10 @@ if(WIN32)
   )
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
 else()
-  target_compile_options(reafab PRIVATE
-    -Wall -Wextra -Werror -Wpedantic
-    # -Wno-unused-parameter -Wno-missing-field-initializers
-    # -Wno-unused-function -Wno-missing-braces
+  target_compile_options(common INTERFACE
+    -Wall -Wextra -Werror
+    -Wno-unused-parameter -Wno-missing-field-initializers
+    -Wno-unused-function -Wno-missing-braces
   )
 
   # Clang 11
