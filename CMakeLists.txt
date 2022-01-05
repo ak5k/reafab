@@ -158,8 +158,20 @@ if(UNIX AND NOT APPLE)
 endif()
 
 if(NOT WIN32)
-  find_package(SWELL REQUIRED)
-  target_link_libraries(${PROJECT_NAME} SWELL::swell)
+if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
+    file(REMOVE
+        ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
+    )
+    find_package(Git QUIET)
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+    if(NOT CMAKE_SYSTEM_NAME MATCHES Windows)
+        file(CREATE_LINK
+            ${PROJECT_SOURCE_DIR}/vendor/WDL/WDL
+            ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
+            SYMBOLIC)
+    endif()
+endif()
 endif()
 
 if (MSVC AND CMAKE_BUILD_TYPE MATCHES RELEASE)
