@@ -157,6 +157,11 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(${PROJECT_NAME} Threads::Threads)
 endif()
 
+if(NOT WIN32)
+  find_package(SWELL REQUIRED)
+  target_link_libraries(common SWELL::swell)
+endif()
+
 if (MSVC AND CMAKE_BUILD_TYPE MATCHES RELEASE)
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR} )
