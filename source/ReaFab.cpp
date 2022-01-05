@@ -588,10 +588,9 @@ static bool Clear(const char* idStringInOptional)
         return true;
     }
 
-    for (auto& [key, value] : controlMap) {
-        (void)value;
-        if (s.compare(key) == 0) {
-            controlMap.erase(key);
+    for (auto& i : controlMap) {
+        if (s.compare(i.first) == 0) {
+            controlMap.erase(i.first);
             return true;
         }
     }
