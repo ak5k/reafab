@@ -120,6 +120,7 @@ add_library(common INTERFACE)
 target_include_directories(
     common INTERFACE
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/vendor/
     ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
 
 # include_directories(
