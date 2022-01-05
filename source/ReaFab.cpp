@@ -77,6 +77,23 @@ void RegisterPlugins()
     controlMap[id] = tempMap;
 
     tempMap.clear();
+    id = "Pro-DS";
+    tempMap[1] = ControlTarget {"Threshold", 1};
+    tempMap[2] = ControlTarget {"Range", 1};
+    tempMap[3] = ControlTarget {"High-Pass Frequency", 1};
+    tempMap[4] = ControlTarget {"Low-Pass Frequency", 1};
+    tempMap[5] = ControlTarget {"Stereo Link", 1};
+    tempMap[7] = ControlTarget {"Lookahead", 1};
+    tempMap[17] = ControlTarget {"Mode", 1};
+    tempMap[18] = ControlTarget {"Band Processing", 1};
+    tempMap[19] = ControlTarget {"Stereo Link Mode", 1};
+    tempMap[20] = ControlTarget {"Lookahead Enabled", 1};
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
+    controlMap[id] = tempMap;
+
+    tempMap.clear();
     id = "Pro-C 2";
     tempMap[1] = ControlTarget {"Threshold", 1};
     tempMap[2] = ControlTarget {"Ratio", 1};
@@ -112,22 +129,6 @@ void RegisterPlugins()
     }
     controlMap[id] = tempMap;
 
-    tempMap.clear();
-    id = "Pro-DS";
-    tempMap[1] = ControlTarget {"Threshold", 1};
-    tempMap[2] = ControlTarget {"Range", 1};
-    tempMap[3] = ControlTarget {"High-Pass Frequency", 1};
-    tempMap[4] = ControlTarget {"Low-Pass Frequency", 1};
-    tempMap[5] = ControlTarget {"Stereo Link", 1};
-    tempMap[7] = ControlTarget {"Lookahead", 1};
-    tempMap[17] = ControlTarget {"Mode", 1};
-    tempMap[18] = ControlTarget {"Band Processing", 1};
-    tempMap[19] = ControlTarget {"Stereo Link Mode", 1};
-    tempMap[20] = ControlTarget {"Lookahead Enabled", 1};
-    for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
-    }
-    controlMap[id] = tempMap;
 
     tempMap.clear();
     bands = 6;

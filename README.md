@@ -1,6 +1,6 @@
 # ReaFab
 ## REAPER Fabulous contextual plug-in controller and API extension
-A REAPER extension to emulate digital console type of workflow for setting plugin parameters in the context of currently selected track/channel. Registers 32 custom actions which function as kind of API based virtual control surface, or 'dynamic automapping' macro controls. 8 endless rotary encoders in MIDI Relative mode and 24 buttons are supported. 8 buttons are reserved for navigating the 'virtual channelstrip'. Built-in support for some [FabFilter](https://www.fabfilter.com)s, the [ReEQ](https://forum.cockos.com/showthread.php?t=213501) and some stock REAPER plugins.
+A REAPER extension to emulate digital console type of workflow for setting channelstrip plugin parameters in the context of currently selected track/channel. Registers 32 custom actions which function as kind of API based virtual control surface, or 'dynamic automapping' macro controls. 8 endless rotary encoders in MIDI Relative mode and 24 buttons are supported. 8 buttons are reserved for navigating the 'virtual channelstrip'. Built-in support for some [FabFilter](https://www.fabfilter.com)s, the [ReEQ](https://forum.cockos.com/showthread.php?t=213501) and some stock REAPER plugins.
 
 * 8 encoders, 24 buttons. MIDI Relative mode for instant pickup without need for parameter feedback or soft pickup, and for wide hardware support. Last 8 buttons function as plugin selectors; "1st, 2nd, 3rd etc supported plugin".
 * Hopefully sensible defaults for some common plugins.
