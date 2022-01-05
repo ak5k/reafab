@@ -10,6 +10,8 @@
 
 namespace reafab {
 
+#define NUMCONTROLTYPES 8
+
 MediaTrack* prevTrack {0};
 MediaTrack* track {0}; // current track
 bool hidden {false};
@@ -17,7 +19,7 @@ char bufOut[BUFSIZ] {0};
 int inputValue {0};
 size_t currentFXindex {0};
 static ImGui_Context* ctx;
-static int imguiActionId;
+static int imguiActionId {-1};
 std::map<GUID*, int> previousBand;
 static std::map<int, int> actions;
 std::mutex m;
@@ -27,18 +29,17 @@ struct ControlTarget {
     std::string paramId {0};
     int control {0};
     int bands {0};
-    double rate {1.};
+    // double step {1.};
+    double step {0.0013123359531164};
     double accel {1.};
     double minval {0};
     double maxval {0};
-    double step {0.0013123359531164};
 };
 
 std::map<std::string, std::map<int, ControlTarget>> controlMap;
 
 void RegisterPlugins()
 {
-    const double fabAccel = 3.;
     std::map<int, ControlTarget> tempMap;
     std::string id {"Pro-Q 3"};
     int bands = 24;
@@ -56,7 +57,7 @@ void RegisterPlugins()
     tempMap[21] = ControlTarget {"-Band 00 Slope", 1, bands};
     tempMap[22] = ControlTarget {"Band 00 Slope", 1, bands};
     for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
+        i.second.accel = 3;
     }
     controlMap[id] = tempMap;
 
@@ -72,7 +73,7 @@ void RegisterPlugins()
     tempMap[17] = ControlTarget {"-Style", 1};
     tempMap[18] = ControlTarget {"Style", 1};
     for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
+        i.second.accel = 3;
     }
     controlMap[id] = tempMap;
 
@@ -89,7 +90,7 @@ void RegisterPlugins()
     tempMap[19] = ControlTarget {"Stereo Link Mode", 1};
     tempMap[20] = ControlTarget {"Lookahead Enabled", 1};
     for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
+        i.second.accel = 3;
     }
     controlMap[id] = tempMap;
 
@@ -108,7 +109,7 @@ void RegisterPlugins()
     tempMap[19] = ControlTarget {"Auto Gain", 1};
     tempMap[20] = ControlTarget {"Auto Release", 1};
     for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
+        i.second.accel = 3;
     }
     controlMap[id] = tempMap;
 
@@ -125,7 +126,7 @@ void RegisterPlugins()
     tempMap[18] = ControlTarget {"Style", 1};
     tempMap[19] = ControlTarget {"Unity Gain", 1};
     for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
+        i.second.accel = 3;
     }
     controlMap[id] = tempMap;
 
@@ -145,18 +146,17 @@ void RegisterPlugins()
     tempMap[18] = ControlTarget {"band", 2, bands};
     tempMap[19] = ControlTarget {"Band 00 Dynamics Mode", 1, bands};
     for (auto&& i : tempMap) {
-        i.second.rate = fabAccel;
+        i.second.accel = 3;
     }
     controlMap[id] = tempMap;
 
     tempMap.clear();
     id = "ReEQ";
     bands = 5;
-    double rate = 400;
-    double accel = 1.0;
-    tempMap[1] = ControlTarget {"Filter00 Frequency", 8, bands, rate, accel};
-    tempMap[2] = ControlTarget {"Filter00 Gain", 8, bands, rate, accel};
-    tempMap[3] = ControlTarget {"Filter00 Q", 8, bands, rate, accel};
+    double step = 0.4;
+    tempMap[1] = ControlTarget {"Filter00 Frequency", 8, bands, step};
+    tempMap[2] = ControlTarget {"Filter00 Gain", 8, bands, step};
+    tempMap[3] = ControlTarget {"Filter00 Q", 8, bands, step};
     tempMap[4] = ControlTarget {"Filter00 Type", 1, bands};
     tempMap[5] = ControlTarget {"Filter00 Slope", 1, bands};
     tempMap[9] = ControlTarget {"Filter00 Mode", 7, bands, 1.0, 1.0, 1.0, 2.0};
@@ -181,6 +181,9 @@ void RegisterPlugins()
     tempMap[8] = ControlTarget {"Wet", 1};
     tempMap[17] = ControlTarget {"AutoMkUp", 1};
     tempMap[18] = ControlTarget {"AutoRel", 1};
+    for (auto&& i : tempMap) {
+        i.second.step = i.second.step * 2;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -201,6 +204,9 @@ void RegisterPlugins()
     tempMap[7] = ControlTarget {"Dry", 1};
     tempMap[8] = ControlTarget {"Wet", 1};
     tempMap[17] = ControlTarget {"InvrtWet", 5};
+    for (auto&& i : tempMap) {
+        i.second.step = i.second.step * 2;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -219,6 +225,21 @@ void RegisterPlugins()
     tempMap[19] = ControlTarget {"00-MakeUp", 5, bands};
     tempMap[20] = ControlTarget {"00-AutoRel", 5, bands};
     tempMap[21] = ControlTarget {"00-FeedBk", 5, bands};
+    for (auto&& i : tempMap) {
+        i.second.step = i.second.step * 2;
+    }
+
+    tempMap.clear();
+    bands = 8;
+    id = "ReaEQ (ReaPlugs Edition)";
+    tempMap[1] = ControlTarget {"00-Freq", 1, bands};
+    tempMap[2] = ControlTarget {"00-Gain", 1, bands};
+    tempMap[3] = ControlTarget {"00-Q", 1, bands};
+    tempMap[17] = ControlTarget {"-band", 2, bands};
+    tempMap[18] = ControlTarget {"band", 2, bands};
+    for (auto&& i : tempMap) {
+        i.second.step = i.second.step * 2;
+    }
     controlMap[id] = tempMap;
 
     return;
@@ -368,14 +389,11 @@ void ExecuteCommand(int command)
 
     // direct
     if (control == 1) {
-        if (inputValue > 64) {
-            inputValue = inputValue - 128;
-        }
         if (stepOut != 0.) {
             step = stepOut;
         }
         else {
-            step = step * currentControlTarget.rate;
+            // step = step * currentControlTarget.step;
         }
         newValue = step * inputValue;
         if (abs(inputValue) > 1) {
@@ -458,14 +476,28 @@ void ShowTrackFXChain()
     return;
 }
 
-void ProcessCommand(int command, int val)
+void ProcessCommand(int command, int val, int relmode = 1)
 {
     std::scoped_lock<std::mutex> lock {m};
     if (command < 33) {
         inputValue = val;
+        if (relmode == 1) {
+            if (val > 64) {
+                inputValue = val - 128;
+            }
+        }
+        if (relmode == 2) {
+            inputValue = val - 64;
+        }
+        if (relmode == 3) {
+            if (val > 64) {
+                inputValue = -1 * (val - 64);
+            }
+        }
         if (command > 8) {
             inputValue = 1;
         }
+
         Initialize();
         if (command > 24) {
             currentFXindex = command - 24 - 1;
@@ -510,7 +542,7 @@ static bool OnAction(
         ShowConsoleMsg("");
         return true;
     }
-    ProcessCommand(actions[command], val);
+    ProcessCommand(actions[command], val, relmode);
     return true;
 }
 
@@ -588,10 +620,9 @@ static bool Clear(const char* idStringInOptional)
         return true;
     }
 
-    for (auto& [key, value] : controlMap) {
-        (void)value;
-        if (s.compare(key) == 0) {
-            controlMap.erase(key);
+    for (auto& i : controlMap) {
+        if (s.compare(i.first) == 0) {
+            controlMap.erase(i.first);
             return true;
         }
     }
@@ -609,14 +640,14 @@ static bool Map(
     const char* paramId,
     int control,
     const int* bandsInOptional,
-    const double* rateInOptional,
+    // const double* rateInOptional,
+    const double* stepInOptional,
     const double* accelInOptional,
     const double* minvalInOptional,
-    const double* maxvalInOptional,
-    const double* stepInOptional)
+    const double* maxvalInOptional)
 {
     if (command < 1 || command > 24 || !fxId || !paramId || control < 1 ||
-        control > 8) {
+        control > NUMCONTROLTYPES) {
         return false;
     }
     std::string fxIdString {fxId};
@@ -629,9 +660,9 @@ static bool Map(
         }
         currentControlTarget.bands = *bandsInOptional;
     }
-    if (rateInOptional) {
-        currentControlTarget.rate = *rateInOptional;
-    }
+    // if (rateInOptional) {
+    //     currentControlTarget.step = *rateInOptional;
+    // }
     if (accelInOptional) {
         currentControlTarget.accel = *accelInOptional;
     }
@@ -652,23 +683,22 @@ static bool Map(
 const char* defstring_Map =
     "bool\0"
     "const char*,int,const "
-    "char*,int,int*,double*,double*,double*,double*,double*\0"
-    "fxId,command,paramId,control,bandsInOptional,rateInOptional,"
+    "char*,int,int*,double*,double*,double*,double*\0"
+    "fxId,command,paramId,control,bandsInOptional,stepInOptional,"
     "accelInOptional,"
-    "minvalInOptional,maxvalInOptional,stepInOptional\0"
+    "minvalInOptional,maxvalInOptional\0"
     "Creates control mapping for ReaFab command.\n"
     "fxId e.g. \"ReaComp\".\n"
     "command 1-8 for encoders, 9-24 for buttons.\n"
     "paramId e.g. \"Ratio\".\n"
     "control 1 = direct, 2 = band selector, 3 = cycle, 4 = invert, 5 = force "
-    "toggle, 6 = force range, 7 = 5 & 6, 8 = force continuous.\n"
+    "toggle, 6 = force range, 7 = 5 and 6, 8 = force continuous.\n"
     "bands define, if target fx has multiple identical target bands. In this "
     "case, paramId must include 00 placeholder, e.g. \"Band 00 Gain\".\n"
-    "rate overrides built-in default control rate of 1.0.\n"
-    "accel overrides built-in default control acceleration rate of 1.0.\n"
-    "minval & maxval override default detected target param value range.\n"
-    "step overrides built-in default stepping of ~0.001 for continuous "
+    "step overrides built-in default step of ~0.001 for continuous "
     "parameters.\n"
+    "accel overrides built-in default control acceleration step of 1.0.\n"
+    "minval & maxval override default detected target param value range.\n"
     "Prefixing paramId with \"-\" reverses direction; useful for creating "
     "separate next/previous mappings for bands or list type value navigation.";
 
@@ -682,6 +712,19 @@ static void ImGuiFrame()
     int& fx = fxIndices[currentFXindex];
     TrackFX_GetFXName(track, fx, bufOut, BUFSIZ);
     std::string fx_name(bufOut);
+
+    std::string text = "track ";
+    text +=
+        std::to_string((int)GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER"));
+    text += std::string(": ");
+    GetTrackName(track, bufOut, BUFSIZ);
+    text += std::string(bufOut);
+    ImGui_Text(ctx, text.c_str());
+
+    text = std::string("fx: ");
+    text += fx_name;
+    ImGui_Text(ctx, text.c_str());
+
     std::map<int, ControlTarget> currentControlMap;
     for (auto& [key, value] : controlMap) {
         if (fx_name.find(key) != std::string::npos) {
@@ -729,11 +772,16 @@ static void ImGuiFrame()
             }
         }
         ImGui_TableSetColumnIndex(ctx, 0);
-        std::string text = "b9-16: ";
+        text = "b9-16: ";
         ImGui_Text(ctx, text.c_str());
         for (int column = 1; column < 9; column++) {
             ImGui_TableSetColumnIndex(ctx, column);
             text = std::string("fx") + std::to_string(column);
+            if (fxIndices.size() > column - 1) {
+                TrackFX_GetFXName(track, fxIndices[column - 1], bufOut, BUFSIZ);
+                text = text + std::string(": ");
+                text = text + std::string(bufOut);
+            }
             ImGui_Text(ctx, text.c_str());
         }
         ImGui_EndTable(ctx);
@@ -747,7 +795,7 @@ static void ImGuiLoop()
         ctx = ImGui_CreateContext("ReaFab");
 
     int cond {ImGui_Cond_FirstUseEver};
-    ImGui_SetNextWindowSize(ctx, 800, 30, &cond);
+    ImGui_SetNextWindowSize(ctx, 1024, 144, &cond);
 
     bool open {true};
     if (ImGui_Begin(ctx, "ReaFab Monitor", &open)) {

@@ -1,4 +1,4 @@
-
+/*
 #ifdef NDEBUG
 #define REAPERAPI_MINIMAL
 #define REAPERAPI_WANT_GetSelectedTrack2
@@ -18,7 +18,7 @@
 #define REAPERAPI_WANT_plugin_getapi
 #define REAPERAPI_WANT_plugin_register
 #endif
-
+ */
 #define REAPERAPI_IMPLEMENT
 #include <reaper_plugin_functions.h>
 #define REAIMGUIAPI_IMPLEMENT

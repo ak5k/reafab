@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19.0)
-project(reaper_reafab VERSION 0.3.7 LANGUAGES CXX)
+project(reaper_reafab VERSION 0.3.8 LANGUAGES CXX)
 
 include(CheckCompilerFlag)
 include(CheckIncludeFileCXX)
