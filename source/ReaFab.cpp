@@ -527,7 +527,7 @@ const char* defstring_Do =
     "bool\0int,int\0command,val\0"
     "Runs ReaFab actions/commands. First "
     "parameter (command) is ReaFab command number, e.g. 3 for 3rd encoder "
-    "rotation. Second parameter (val) is MIDI CC Relative1 value. Value 1 is "
+    "rotation. Second parameter (val) is MIDI CC Relative value. Value 1 is "
     "increment of 1, 127 is decrement of 1. 2 is inc 2, 126 is dec 2 and so "
     "on. For button press (commands 9-32) a value of 127 is recommended.";
 
@@ -575,10 +575,10 @@ static bool Get(int command, int* fxOut, int* paramOut)
 
 const char* defstring_Get =
     "bool\0int,int*,int*\0command,fxOut,paramOut\0"
-    "Returns target FX and parameter index for given ReaFab command on "
-    "currently selected track and ReaFab FX index. Valid command range 1 ... "
-    "24. Returns false if no such command mapping is found. Returns param "
-    "index -1 for ReaFab internal band change command.";
+    "Returns target FX and parameter index for given ReaFab command in context "
+    "of selected track and ReaFab FX index. Valid command range 1 ... 24. "
+    "Returns false if no such command mapping is found. Returns param index -1 "
+    "for ReaFab internal band change command.";
 
 static bool Clear(const char* idStringInOptional)
 {
@@ -655,21 +655,21 @@ const char* defstring_Map =
     "fxId,command,paramId,control,bandsInOptional,rateInOptional,"
     "accelInOptional,"
     "minvalInOptional,maxvalInOptional,stepInOptional\0"
-    "Creates control mapping for ReaFab command. "
-    "fxId e.g. \"ReaComp\". "
-    "command 1-8 for encoders, 9-24 for buttons. "
-    "paramId e.g. \"Ratio\". "
+    "Creates control mapping for ReaFab command.\n"
+    "fxId e.g. \"ReaComp\".\n"
+    "command 1-8 for encoders, 9-24 for buttons.\n"
+    "paramId e.g. \"Ratio\".\n"
     "control 1 = direct, 2 = band selector, 3 = cycle, 4 = invert, 5 = force "
-    "toggle, 6 = force range, 7 = 5 & 6, 8 = force continuous. "
+    "toggle, 6 = force range, 7 = 5 & 6, 8 = force continuous.\n"
     "bands define, if target fx has multiple identical target bands. In this "
-    "case, paramId must include 00 placeholder, e.g. \"Band 00 Gain\". "
-    "rate overrides built-in default control rate of 1.0. "
-    "accel overrides built-in default control acceleration rate of 1.0. "
-    "minval & maxval override default detected target param value range. "
+    "case, paramId must include 00 placeholder, e.g. \"Band 00 Gain\".\n"
+    "rate overrides built-in default control rate of 1.0.\n"
+    "accel overrides built-in default control acceleration rate of 1.0.\n"
+    "minval & maxval override default detected target param value range.\n"
     "step overrides built-in default stepping of ~0.001 for continuous "
-    "parameters. "
+    "parameters.\n"
     "Prefixing paramId with \"-\" reverses direction; useful for creating "
-    "separate next/previous mappings for bands or list type value navigation. ";
+    "separate next/previous mappings for bands or list type value navigation.";
 
 static void ImGuiFrame()
 {
@@ -850,10 +850,10 @@ void Register(bool load)
             "APIvararg_Fab_Get",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Get>));
 
-        plugin_register("API_Fab_Set", (void*)Do);
-        plugin_register("APIdef_Fab_Set", (void*)defstring_Do);
+        plugin_register("API_Fab_Do", (void*)Do);
+        plugin_register("APIdef_Fab_Do", (void*)defstring_Do);
         plugin_register(
-            "APIvararg_Fab_Set",
+            "APIvararg_Fab_Do",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Do>));
 
         plugin_register("API_Fab_Map", (void*)Map);
@@ -875,10 +875,10 @@ void Register(bool load)
             "-APIvararg_Fab_Get",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Get>));
 
-        plugin_register("-API_Fab_Set", (void*)Do);
-        plugin_register("-APIdef_Fab_Set", (void*)defstring_Do);
+        plugin_register("-API_Fab_Do", (void*)Do);
+        plugin_register("-APIdef_Fab_Do", (void*)defstring_Do);
         plugin_register(
-            "-APIvararg_Fab_Set",
+            "-APIvararg_Fab_Do",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Do>));
 
         plugin_register("-API_Fab_Map", (void*)Map);
