@@ -5,21 +5,21 @@ include(CheckCompilerFlag)
 include(CheckIncludeFileCXX)
 include(CheckLinkerFlag)
 
-# set up reaper-sdk and WDL
-if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
-    file(REMOVE
-        ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
-    )
-    find_package(Git QUIET)
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-    if(NOT CMAKE_SYSTEM_NAME MATCHES Windows)
-        file(CREATE_LINK
-            ${PROJECT_SOURCE_DIR}/vendor/WDL/WDL
-            ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
-            SYMBOLIC)
-    endif()
-endif()
+# # set up reaper-sdk and WDL
+# if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
+#     file(REMOVE
+#         ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
+#     )
+#     find_package(Git QUIET)
+#     execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1
+#         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+#     if(NOT CMAKE_SYSTEM_NAME MATCHES Windows)
+#         file(CREATE_LINK
+#             ${PROJECT_SOURCE_DIR}/vendor/WDL/WDL
+#             ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
+#             SYMBOLIC)
+#     endif()
+# endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -152,8 +152,6 @@ if(HAS_STD_VARIANT)
 endif()
 
 add_library(${PROJECT_NAME} SHARED)
-add_subdirectory(${CMAKE_SOURCE_DIR}/source)
-target_link_libraries(${PROJECT_NAME} reafab)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   PREFIX "" # disable the "lib" prefix
@@ -181,3 +179,6 @@ if (MSVC AND CMAKE_BUILD_TYPE MATCHES RELEASE)
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_BINARY_DIR} )
     # etc for the other available configuration types (MinSizeRel, RelWithDebInfo)
 endif ()
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/source)
+target_link_libraries(${PROJECT_NAME} reafab)
