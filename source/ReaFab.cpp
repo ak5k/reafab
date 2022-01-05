@@ -14,7 +14,6 @@ MediaTrack* prevTrack {0};
 MediaTrack* track {0}; // current track
 bool hidden {false};
 char bufOut[BUFSIZ] {0};
-double step {0};
 int inputValue {0};
 size_t currentFXindex {0};
 static ImGui_Context* ctx;
@@ -26,18 +25,20 @@ std::vector<int> fxIndices;
 
 struct ControlTarget {
     std::string paramId {0};
-    int ctrl {0};
+    int control {0};
     int bands {0};
     double rate {1.};
-    double accel {3.};
+    double accel {1.};
     double minval {0};
     double maxval {0};
+    double step {0.0013123359531164};
 };
 
 std::map<std::string, std::map<int, ControlTarget>> controlMap;
 
 void RegisterPlugins()
 {
+    const double fabAccel = 3.;
     std::map<int, ControlTarget> tempMap;
     std::string id {"Pro-Q 3"};
     int bands = 24;
@@ -54,6 +55,9 @@ void RegisterPlugins()
     tempMap[20] = ControlTarget {"Band 00 Shape", 1, bands};
     tempMap[21] = ControlTarget {"-Band 00 Slope", 1, bands};
     tempMap[22] = ControlTarget {"Band 00 Slope", 1, bands};
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -67,6 +71,9 @@ void RegisterPlugins()
     tempMap[7] = ControlTarget {"Range", 1};
     tempMap[17] = ControlTarget {"-Style", 1};
     tempMap[18] = ControlTarget {"Style", 1};
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -83,6 +90,9 @@ void RegisterPlugins()
     tempMap[18] = ControlTarget {"Style", 1};
     tempMap[19] = ControlTarget {"Auto Gain", 1};
     tempMap[20] = ControlTarget {"Auto Release", 1};
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -97,6 +107,9 @@ void RegisterPlugins()
     tempMap[17] = ControlTarget {"-Style", 1};
     tempMap[18] = ControlTarget {"Style", 1};
     tempMap[19] = ControlTarget {"Unity Gain", 1};
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -111,6 +124,9 @@ void RegisterPlugins()
     tempMap[18] = ControlTarget {"Band Processing", 1};
     tempMap[19] = ControlTarget {"Stereo Link Mode", 1};
     tempMap[20] = ControlTarget {"Lookahead Enabled", 1};
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
     controlMap[id] = tempMap;
 
     tempMap.clear();
@@ -128,8 +144,83 @@ void RegisterPlugins()
     tempMap[17] = ControlTarget {"-band", 2, bands};
     tempMap[18] = ControlTarget {"band", 2, bands};
     tempMap[19] = ControlTarget {"Band 00 Dynamics Mode", 1, bands};
-
+    for (auto&& i : tempMap) {
+        i.second.rate = fabAccel;
+    }
     controlMap[id] = tempMap;
+
+    tempMap.clear();
+    id = "ReEQ";
+    bands = 5;
+    double rate = 400;
+    double accel = 1.0;
+    tempMap[1] = ControlTarget {"Filter00 Frequency", 8, bands, rate, accel};
+    tempMap[2] = ControlTarget {"Filter00 Gain", 8, bands, rate, accel};
+    tempMap[3] = ControlTarget {"Filter00 Q", 8, bands, rate, accel};
+    tempMap[4] = ControlTarget {"Filter00 Type", 1, bands};
+    tempMap[5] = ControlTarget {"Filter00 Slope", 1, bands};
+    tempMap[9] = ControlTarget {"Filter00 Mode", 7, bands, 1.0, 1.0, 1.0, 2.0};
+    tempMap[10] = ControlTarget {"Filter00 Gain", 4, bands};
+    tempMap[17] = ControlTarget {"-band", 2, bands};
+    tempMap[18] = ControlTarget {"band", 2, bands};
+    tempMap[19] = ControlTarget {"-Filter00 Type", 1, bands};
+    tempMap[20] = ControlTarget {"Filter00 Type", 1, bands};
+    tempMap[21] = ControlTarget {"-Filter00 Slope", 1, bands};
+    tempMap[22] = ControlTarget {"Filter00 Slope", 1, bands};
+    controlMap[id] = tempMap;
+
+    tempMap.clear();
+    id = "ReaComp";
+    tempMap[1] = ControlTarget {"Thresh", 1};
+    tempMap[2] = ControlTarget {"Ratio", 1};
+    tempMap[3] = ControlTarget {"Attack", 1};
+    tempMap[4] = ControlTarget {"Release", 1};
+    tempMap[5] = ControlTarget {"Knee", 1};
+    tempMap[6] = ControlTarget {"RMS size", 1};
+    tempMap[7] = ControlTarget {"Dry", 1};
+    tempMap[8] = ControlTarget {"Wet", 1};
+    tempMap[17] = ControlTarget {"AutoMkUp", 1};
+    tempMap[18] = ControlTarget {"AutoRel", 1};
+    controlMap[id] = tempMap;
+
+    tempMap.clear();
+    id = "ReaLimit";
+    tempMap[1] = ControlTarget {"Threshold", 1};
+    tempMap[2] = ControlTarget {"Ceiling", 1};
+    tempMap[3] = ControlTarget {"Release", 1};
+    controlMap[id] = tempMap;
+
+    tempMap.clear();
+    id = "ReaGate";
+    tempMap[1] = ControlTarget {"Thresh", 1};
+    tempMap[2] = ControlTarget {"Hold", 1};
+    tempMap[3] = ControlTarget {"Attack", 1};
+    tempMap[4] = ControlTarget {"Release", 1};
+    tempMap[5] = ControlTarget {"Hystrsis", 1};
+    tempMap[6] = ControlTarget {"RMS size", 1};
+    tempMap[7] = ControlTarget {"Dry", 1};
+    tempMap[8] = ControlTarget {"Wet", 1};
+    tempMap[17] = ControlTarget {"InvrtWet", 5};
+    controlMap[id] = tempMap;
+
+    tempMap.clear();
+    bands = 24;
+    id = "ReaXcomp";
+    tempMap[1] = ControlTarget {"00-Thresh", 1, bands};
+    tempMap[2] = ControlTarget {"00-Ratio", 1, bands};
+    tempMap[3] = ControlTarget {"00-Attack", 1, bands};
+    tempMap[4] = ControlTarget {"00-Release", 1, bands};
+    tempMap[5] = ControlTarget {"00-Knee", 1, bands};
+    tempMap[6] = ControlTarget {"00-RMS", 1, bands};
+    tempMap[7] = ControlTarget {"00-Freq", 1, bands};
+    tempMap[9] = ControlTarget {"00-Active", 5, bands};
+    tempMap[17] = ControlTarget {"-band", 2, bands};
+    tempMap[18] = ControlTarget {"band", 2, bands};
+    tempMap[19] = ControlTarget {"00-MakeUp", 5, bands};
+    tempMap[20] = ControlTarget {"00-AutoRel", 5, bands};
+    tempMap[21] = ControlTarget {"00-FeedBk", 5, bands};
+    controlMap[id] = tempMap;
+
     return;
 }
 
@@ -155,15 +246,17 @@ void ExecuteCommand(int command)
         }
     }
 
+    double step = currentControlTarget.step;
+
     // failsafe test
-    if (currentControlTarget.ctrl == 0) {
+    if (currentControlTarget.control == 0) {
         return;
     }
 
     // convinience variables
     double newValue {0};
     std::string paramName = currentControlTarget.paramId;
-    int ctrl = currentControlTarget.ctrl;
+    int control = currentControlTarget.control;
     int bands = currentControlTarget.bands;
     int param {-1};
 
@@ -175,7 +268,7 @@ void ExecuteCommand(int command)
     }
 
     // change band
-    if (ctrl == 2) {
+    if (control == 2) {
         if (paramName.rfind("-", 0) == 0) {
             band--;
             if (band < 1) {
@@ -201,7 +294,7 @@ void ExecuteCommand(int command)
     previousBand[fx_guid] = band;
 
     // flip sign
-    if (ctrl == 1) {
+    if (control != 2) {
         if (paramName.rfind("-", 0) == 0) {
             inputValue = -1 * inputValue;
             paramName.erase(0, 1);
@@ -253,30 +346,38 @@ void ExecuteCommand(int command)
         &istoggleOut);
 
     // force range
-    if (ctrl == 6 || ctrl == 7) {
+    if (control == 6 || control == 7) {
         minvalOut = currentControlTarget.minval;
         maxvalOut = currentControlTarget.maxval;
-        if (ctrl == 6) {
-            ctrl = 1;
+        if (control == 6) {
+            control = 1;
         }
     }
 
     // force toggle
-    if (ctrl == 5 || ctrl == 7) {
+    if (control == 5 || control == 7) {
         istoggleOut = true;
-        ctrl = 1;
+        control = 1;
+    }
+
+    // force continous
+    if (control == 8) {
+        stepOut = 0.;
+        control = 1;
     }
 
     // direct
-    if (ctrl == 1) {
+    if (control == 1) {
         if (inputValue > 64) {
             inputValue = inputValue - 128;
         }
         if (stepOut != 0.) {
             step = stepOut;
         }
+        else {
+            step = step * currentControlTarget.rate;
+        }
         newValue = step * inputValue;
-        newValue = newValue * currentControlTarget.rate;
         if (abs(inputValue) > 1) {
             newValue = newValue * currentControlTarget.accel;
         }
@@ -292,7 +393,7 @@ void ExecuteCommand(int command)
     }
 
     // cycle
-    if (ctrl == 3) {
+    if (control == 3) {
         if (stepOut != 0.) {
             step = stepOut;
         }
@@ -301,14 +402,14 @@ void ExecuteCommand(int command)
     }
 
     // invert
-    if (ctrl == 4) {
+    if (control == 4) {
         newValue = (currentValue - midvalOut) * -1 + midvalOut;
     }
 
     // keep values between min and max
     if (newValue > maxvalOut) {
         newValue = maxvalOut;
-        if (ctrl == 3) { // cycle overflow
+        if (control == 3) { // cycle overflow
             newValue = minvalOut;
         }
     }
@@ -326,7 +427,6 @@ void Initialize()
     if (!track) {
         return;
     }
-    step = 0.0013123359531164;
     fxIndices.clear();
 
     // find fx indices for supported plugins based on names
@@ -405,8 +505,8 @@ static bool OnAction(
     if (!actions[command]) {
         return false;
     }
-    if (actions[command] < 9 && relmode != 1) {
-        ShowConsoleMsg("Not MIDI CC Relative1");
+    if (actions[command] < 9 && relmode == 0) {
+        ShowConsoleMsg("Not MIDI Relative");
         ShowConsoleMsg("");
         return true;
     }
@@ -414,7 +514,7 @@ static bool OnAction(
     return true;
 }
 
-static bool Set(int command, int val)
+static bool Do(int command, int val)
 {
     if (command < 1 || command > 32 || val < 1 || val > 127) {
         return false;
@@ -423,7 +523,7 @@ static bool Set(int command, int val)
     return true;
 }
 
-const char* defstring_Set =
+const char* defstring_Do =
     "bool\0int,int\0command,val\0"
     "Runs ReaFab actions/commands. First "
     "parameter (command) is ReaFab command number, e.g. 3 for 3rd encoder "
@@ -465,7 +565,7 @@ static bool Get(int command, int* fxOut, int* paramOut)
             break;
         }
     }
-    if (param != -1 || currentControlTarget.ctrl == 2) {
+    if (param != -1 || currentControlTarget.control == 2) {
         *fxOut = fx;
         *paramOut = param;
         return true;
@@ -506,21 +606,22 @@ static bool Map(
     const char* fxId,
     int command,
     const char* paramId,
-    int ctrl,
+    int control,
     const int* bandsInOptional,
     const double* rateInOptional,
     const double* accelInOptional,
     const double* minvalInOptional,
-    const double* maxvalInOptional)
+    const double* maxvalInOptional,
+    const double* stepInOptional)
 {
-    if (command < 1 || command > 24 || !fxId || !paramId || ctrl < 1 ||
-        ctrl > 7) {
+    if (command < 1 || command > 24 || !fxId || !paramId || control < 1 ||
+        control > 8) {
         return false;
     }
     std::string fxIdString {fxId};
     ControlTarget currentControlTarget;
     currentControlTarget.paramId = std::string(paramId);
-    currentControlTarget.ctrl = ctrl;
+    currentControlTarget.control = control;
     if (bandsInOptional) {
         if (!(currentControlTarget.paramId.find("00") != std::string::npos)) {
             return false;
@@ -539,6 +640,10 @@ static bool Map(
     if (maxvalInOptional) {
         currentControlTarget.maxval = *minvalInOptional;
     }
+    if (stepInOptional) {
+        currentControlTarget.step = *stepInOptional;
+    }
+
     controlMap[fxIdString][command] = currentControlTarget;
     return true;
 }
@@ -546,20 +651,23 @@ static bool Map(
 const char* defstring_Map =
     "bool\0"
     "const char*,int,const "
-    "char*,int,int*,double*,double*,double*,double*\0"
-    "fxId,command,paramId,ctrl,bandsInOptional,rateInOptional,accelInOptional,"
-    "minvalInOptional,maxvalInOptional\0"
+    "char*,int,int*,double*,double*,double*,double*,double*\0"
+    "fxId,command,paramId,control,bandsInOptional,rateInOptional,"
+    "accelInOptional,"
+    "minvalInOptional,maxvalInOptional,stepInOptional\0"
     "Creates control mapping for ReaFab command. "
     "fxId e.g. \"ReaComp\". "
     "command 1-8 for encoders, 9-24 for buttons. "
     "paramId e.g. \"Ratio\". "
-    "ctrl 1 = direct, 2 = band selector, 3 = cycle, 4 = invert, 5 = force "
-    "toggle, 6 = force range, 7 = 5 & 6. "
+    "control 1 = direct, 2 = band selector, 3 = cycle, 4 = invert, 5 = force "
+    "toggle, 6 = force range, 7 = 5 & 6, 8 = force continuous. "
     "bands define, if target fx has multiple identical target bands. In this "
     "case, paramId must include 00 placeholder, e.g. \"Band 00 Gain\". "
-    "rate overrides built-in default control rate. "
-    "accel overrides built-int default control acceleration rate. "
-    "minval & maxval override target value range. "
+    "rate overrides built-in default control rate of 1.0. "
+    "accel overrides built-in default control acceleration rate of 1.0. "
+    "minval & maxval override default detected target param value range. "
+    "step overrides built-in default stepping of ~0.001 for continuous "
+    "parameters. "
     "Prefixing paramId with \"-\" reverses direction; useful for creating "
     "separate next/previous mappings for bands or list type value navigation. ";
 
@@ -742,11 +850,11 @@ void Register(bool load)
             "APIvararg_Fab_Get",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Get>));
 
-        plugin_register("API_Fab_Set", (void*)Set);
-        plugin_register("APIdef_Fab_Set", (void*)defstring_Set);
+        plugin_register("API_Fab_Set", (void*)Do);
+        plugin_register("APIdef_Fab_Set", (void*)defstring_Do);
         plugin_register(
             "APIvararg_Fab_Set",
-            reinterpret_cast<void*>(&InvokeReaScriptAPI<&Set>));
+            reinterpret_cast<void*>(&InvokeReaScriptAPI<&Do>));
 
         plugin_register("API_Fab_Map", (void*)Map);
         plugin_register("APIdef_Fab_Map", (void*)defstring_Map);
@@ -767,11 +875,11 @@ void Register(bool load)
             "-APIvararg_Fab_Get",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Get>));
 
-        plugin_register("-API_Fab_Set", (void*)Set);
-        plugin_register("-APIdef_Fab_Set", (void*)defstring_Set);
+        plugin_register("-API_Fab_Set", (void*)Do);
+        plugin_register("-APIdef_Fab_Set", (void*)defstring_Do);
         plugin_register(
             "-APIvararg_Fab_Set",
-            reinterpret_cast<void*>(&InvokeReaScriptAPI<&Set>));
+            reinterpret_cast<void*>(&InvokeReaScriptAPI<&Do>));
 
         plugin_register("-API_Fab_Map", (void*)Map);
         plugin_register("-APIdef_Fab_Map", (void*)defstring_Map);

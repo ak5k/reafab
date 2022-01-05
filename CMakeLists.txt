@@ -65,7 +65,7 @@ endif()
 
 if(WIN32)
   foreach(arg
-    # CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG
+    CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG
     CMAKE_C_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELEASE
     CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO
     CMAKE_C_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_MINSIZEREL
@@ -99,7 +99,7 @@ if(WIN32)
     $<$<NOT:$<CONFIG:Debug>>:/OPT:ICF>
 
     # Use relative path to the PDB file to avoid exposing the full path
-    /PDBALTPATH:%_PDB%
+    # /PDBALTPATH:%_PDB%
   )
 else()
   add_compile_options(
@@ -132,9 +132,10 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/source)
 target_link_libraries(${PROJECT_NAME} reafab)
 
 if(WIN32)
-  target_compile_options(common SYSTEM INTERFACE
-    /W4 /wd4100 /wd4505 /wd2220 /wd4706
-# /WX
+  target_compile_options(reafab PRIVATE
+    /W4 
+    /wd4100 /wd4505 /wd4706
+    /WX
   )
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
 else()
