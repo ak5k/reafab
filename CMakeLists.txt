@@ -159,7 +159,7 @@ endif()
 
 if(NOT WIN32)
   find_package(SWELL REQUIRED)
-  target_link_libraries(common SWELL::swell)
+  target_link_libraries(${PROJECT_NAME} SWELL::swell)
 endif()
 
 if (MSVC AND CMAKE_BUILD_TYPE MATCHES RELEASE)
