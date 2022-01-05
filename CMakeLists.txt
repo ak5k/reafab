@@ -1,25 +1,9 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.19.0)
 project(reaper_reafab VERSION 0.3.7 LANGUAGES CXX)
 
 include(CheckCompilerFlag)
 include(CheckIncludeFileCXX)
 include(CheckLinkerFlag)
-
-# # set up reaper-sdk and WDL
-# if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
-#     file(REMOVE
-#         ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
-#     )
-#     find_package(Git QUIET)
-#     execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1
-#         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-#     if(NOT CMAKE_SYSTEM_NAME MATCHES Windows)
-#         file(CREATE_LINK
-#             ${PROJECT_SOURCE_DIR}/vendor/WDL/WDL
-#             ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
-#             SYMBOLIC)
-#     endif()
-# endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -124,7 +108,9 @@ target_include_directories(
   ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
 if(WIN32)
   target_compile_options(common INTERFACE
-    /W3 /WX /wd4244 /wd4267 /wd4312 /wd4996 /wd5208)
+    /W3 
+    /WX
+    )
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
 else()
   target_compile_options(common INTERFACE
