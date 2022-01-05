@@ -129,7 +129,6 @@ void RegisterPlugins()
     }
     controlMap[id] = tempMap;
 
-
     tempMap.clear();
     bands = 6;
     id = "Pro-MB";
