@@ -11,7 +11,14 @@ paramId = "Filter00 Frequency" -- 00 is a placeholder for selected band
 control = 8 -- control type, 8 for forced continuous, 1 for direct/autodetect
 bands = 5 -- support for 5 bands, apparently 5 bands can be controller via API in ReEQ
 rate = 400.0 -- change default control rate (1.0) to suit some ReEQ parameters
--- rate value is dependent on target parameter, as in this case
+--[[
+rate value is dependent on target parameter, as in this case
+when mapping a single or wideband processor, such as a regular compressor, bands
+can be omitted/left out/nilled
+bands = 1 will be a special case for some plugins, which while being single
+band, still label parameters with index of 1. although, this can be handled by
+writing this by hand in paramId as well.
+]] --
 
 reaper.Fab_Map(fxId, command, paramId, control, bands, rate)
 
