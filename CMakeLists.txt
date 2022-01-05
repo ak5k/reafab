@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16.0)
 project(reaper_reafab VERSION 0.3.7 LANGUAGES CXX)
 
-# include(CheckCompilerFlag)
-# include(CheckIncludeFileCXX)
-# include(CheckLinkerFlag)
+include(CheckCompilerFlag)
+include(CheckIncludeFileCXX)
+include(CheckLinkerFlag)
 
 # set up reaper-sdk and WDL
 if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
@@ -110,34 +110,18 @@ else()
     add_link_options(-Wl,-dead_strip)
   endif()
 
-  # check_linker_flag(CXX -Wl,--no-undefined HAVE_NO_UNDEFINED)
+  check_linker_flag(CXX -Wl,--no-undefined HAVE_NO_UNDEFINED)
   if(HAVE_NO_UNDEFINED)
     add_link_options(-Wl,--no-undefined)
   endif()
 endif()
 
 add_library(common INTERFACE)
-target_include_directories(
-    common INTERFACE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/vendor/
-    ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
-
-# include_directories(
-#     SYSTEM
-#     ${CMAKE_SOURCE_DIR}/include
-#     ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
-
-add_library(${PROJECT_NAME} SHARED)
-add_subdirectory(${CMAKE_SOURCE_DIR}/source)
-target_link_libraries(${PROJECT_NAME} reafab)
-
+target_include_directories(common INTERFACE
+  ${CMAKE_SOURCE_DIR}/vendor ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
 if(WIN32)
-  target_compile_options(reafab PRIVATE
-    /W4 
-    /wd4100 /wd4505 /wd4706
-    /WX
-  )
+  target_compile_options(common INTERFACE
+    /W3 /WX /wd4244 /wd4267 /wd4312 /wd4996 /wd5208)
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
 else()
   target_compile_options(common INTERFACE
@@ -146,22 +130,27 @@ else()
     -Wno-unused-function -Wno-missing-braces
   )
 
+
   # Clang 11
-  # check_compiler_flag(CXX -Wnon-c-typedef-for-linkage HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
-  # if(HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
-  #   target_compile_options(common INTERFACE -Wno-non-c-typedef-for-linkage)
-  # endif()
+  check_compiler_flag(CXX -Wnon-c-typedef-for-linkage HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
+  if(HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
+    target_compile_options(common INTERFACE -Wno-non-c-typedef-for-linkage)
+  endif()
 endif()
 
-# # check_include_file_cxx(optional HAS_STD_OPTIONAL)
-# if(HAS_STD_OPTIONAL)
-#   target_compile_definitions(common INTERFACE HAS_STD_OPTIONAL)
-# endif()
+# check_include_file_cxx(optional HAS_STD_OPTIONAL)
+if(HAS_STD_OPTIONAL)
+  target_compile_definitions(common INTERFACE HAS_STD_OPTIONAL)
+endif()
 
-# # check_include_file_cxx(variant HAS_STD_VARIANT)
-# if(HAS_STD_VARIANT)
-#   target_compile_definitions(common INTERFACE HAS_STD_VARIANT)
-# endif()
+# check_include_file_cxx(variant HAS_STD_VARIANT)
+if(HAS_STD_VARIANT)
+  target_compile_definitions(common INTERFACE HAS_STD_VARIANT)
+endif()
+
+add_library(${PROJECT_NAME} SHARED)
+add_subdirectory(${CMAKE_SOURCE_DIR}/source)
+target_link_libraries(${PROJECT_NAME} reafab)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   PREFIX "" # disable the "lib" prefix
