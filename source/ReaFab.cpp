@@ -182,7 +182,7 @@ void RegisterPlugins()
     tempMap[17] = ControlTarget {"AutoMkUp", 1};
     tempMap[18] = ControlTarget {"AutoRel", 1};
     for (auto&& i : tempMap) {
-        i.second.step = i.second.step*2;
+        i.second.step = i.second.step * 2;
     }
     controlMap[id] = tempMap;
 
@@ -205,7 +205,7 @@ void RegisterPlugins()
     tempMap[8] = ControlTarget {"Wet", 1};
     tempMap[17] = ControlTarget {"InvrtWet", 5};
     for (auto&& i : tempMap) {
-        i.second.step = i.second.step*2;
+        i.second.step = i.second.step * 2;
     }
     controlMap[id] = tempMap;
 
@@ -226,7 +226,7 @@ void RegisterPlugins()
     tempMap[20] = ControlTarget {"00-AutoRel", 5, bands};
     tempMap[21] = ControlTarget {"00-FeedBk", 5, bands};
     for (auto&& i : tempMap) {
-        i.second.step = i.second.step*2;
+        i.second.step = i.second.step * 2;
     }
 
     tempMap.clear();
@@ -238,7 +238,7 @@ void RegisterPlugins()
     tempMap[17] = ControlTarget {"-band", 2, bands};
     tempMap[18] = ControlTarget {"band", 2, bands};
     for (auto&& i : tempMap) {
-        i.second.step = i.second.step*2;
+        i.second.step = i.second.step * 2;
     }
     controlMap[id] = tempMap;
 

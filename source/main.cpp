@@ -1,4 +1,4 @@
-/* 
+/*
 #ifdef NDEBUG
 #define REAPERAPI_MINIMAL
 #define REAPERAPI_WANT_GetSelectedTrack2
