@@ -1,5 +1,5 @@
 # ReaFab
-## REAPER Fabulous contextual plug-in controller and API extension
+## Fabulous REAPER contextual plug-in controller and API extension
 A REAPER extension to emulate digital console type of workflow for setting channelstrip plugin parameters in the context of currently selected track/channel. Registers 32 custom actions which function as kind of API based virtual control surface, or 'dynamic automapping' macro controls. 8 endless rotary encoders in MIDI Relative mode and 24 buttons are supported. 8 buttons are reserved for navigating the 'virtual channelstrip'. Built-in support for some [FabFilter](https://www.fabfilter.com)s, the [ReEQ](https://forum.cockos.com/showthread.php?t=213501) and some stock REAPER plugins.
 
 * 8 encoders, 24 buttons. MIDI Relative mode for instant pickup without need for parameter feedback or soft pickup, and for wide hardware support. Last 8 buttons function as plugin selectors; "1st, 2nd, 3rd etc supported plugin".
@@ -13,8 +13,9 @@ A REAPER extension to emulate digital console type of workflow for setting chann
 
 ### Installation and recommendations
 * Place platform specific library file into REAPER UserPlugins directory.
+* Set hardware MIDI controller encoders to MIDI Relative. E.g. in X-Touch Mini, set Encoder minval to Relative1.
 * Map corresponding MIDI controls to ReaFab actions. Encoders in Relative mode.
 * Using REAPER native actions to navigate tracks will 'increase productivity'.
-* Configure REAPER to show only one Track FX Chain window at a time. Otherwise screen will get cluttered.
+* Configure REAPER to 'Only allow one FX chain window open at a time, Open track FX window on track change, Only if any FX window is open'. Otherwise screen will get cluttered.
 
 ![image](https://i.imgur.com/bAVdj05.gif)
