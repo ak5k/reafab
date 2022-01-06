@@ -192,6 +192,7 @@ void MapPlugins()
     for (auto&& i : tempMap) {
         i.second.step = i.second.step * 2;
     }
+    controlMap[id] = tempMap;
 
     tempMap.clear();
     bands = 8;

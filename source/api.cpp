@@ -71,6 +71,7 @@ void Dump()
             file << "\n";
         }
     }
+    file << "asdf";
     file.close();
     return;
 }
