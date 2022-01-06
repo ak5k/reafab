@@ -1,5 +1,5 @@
--- target plugin is identified based on this string can be the exact or partial
--- plugin name
+-- target plugin is identified based on this string 
+-- can be the exact or partial plugin name
 fxId = "ReEQ"
 
 -- let's clear the built-in mapping for ReEQ first
@@ -9,7 +9,7 @@ reaper.Fab_Clear(fxId)
 command = 1 -- first encoder, 1..8 for encoders, 9-24 for push and buttons
 paramId = "Filter00 Frequency" -- 00 is a placeholder for selected band
 control = 8 -- control type, 8 for forced continuous, 1 for direct/autodetect
-bands = 5 -- support for 5 bands, apparently 5 bands can be controller via API in ReEQ
+bands = 5 -- support for 5 bands, apparently 5 bands can be controlled via API in ReEQ
 step = 0.4 -- change step to better suite hardware controlling ReEQ parameters
 
 --[[
@@ -21,7 +21,8 @@ can be omitted/left out/nilled
 
 bands = 1 will be a special case for some plugins, which while being single
 band, still label parameters with index of 1. although, this can be handled by
-writing this by hand in paramId as well.
+writing this by hand in paramId as well. or to some extent with native REAPER
+mapping
 ]] --
 
 reaper.Fab_Map(fxId, command, paramId, control, bands, step)

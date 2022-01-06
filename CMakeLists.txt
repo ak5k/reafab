@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.19.0)
-project(reaper_reafab VERSION 0.3.8 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.19)
+project(reaper_reafab LANGUAGES CXX)
 
 include(CheckCompilerFlag)
 include(CheckIncludeFileCXX)
@@ -127,12 +127,12 @@ else()
   endif()
 endif()
 
-# check_include_file_cxx(optional HAS_STD_OPTIONAL)
+check_include_file_cxx(optional HAS_STD_OPTIONAL)
 if(HAS_STD_OPTIONAL)
   target_compile_definitions(common INTERFACE HAS_STD_OPTIONAL)
 endif()
 
-# check_include_file_cxx(variant HAS_STD_VARIANT)
+check_include_file_cxx(variant HAS_STD_VARIANT)
 if(HAS_STD_VARIANT)
   target_compile_definitions(common INTERFACE HAS_STD_VARIANT)
 endif()
@@ -151,11 +151,11 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION "${REAPER_USER_PLUGINS}" # Linux .so/macOS .dylib
 )
 
-if(UNIX AND NOT APPLE)
-  set(THREADS_PREFER_PTHREAD_FLAG ON)
-  find_package(Threads REQUIRED)
-  target_link_libraries(${PROJECT_NAME} Threads::Threads)
-endif()
+# if(UNIX AND NOT APPLE)
+#   set(THREADS_PREFER_PTHREAD_FLAG ON)
+#   find_package(Threads REQUIRED)
+#   target_link_libraries(${PROJECT_NAME} Threads::Threads)
+# endif()
 
 if(NOT WIN32)
 if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
@@ -185,3 +185,11 @@ endif ()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/source)
 target_link_libraries(${PROJECT_NAME} reafab)
+
+find_package(WDL REQUIRED)
+target_link_libraries(reafab WDL::WDL)
+
+if(NOT WIN32)
+  find_package(SWELL REQUIRED)
+  target_link_libraries(reafab SWELL::swell)
+endif()

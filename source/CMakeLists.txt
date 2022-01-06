@@ -1,7 +1,10 @@
 add_library(
 	reafab OBJECT
+	api.cpp
+	imgui.cpp
 	main.cpp
-	ReaFab.cpp
+	map_plugins.cpp
+	reafab.cpp
 	)
 
 target_link_libraries(reafab common)

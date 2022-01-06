@@ -1,7 +1,8 @@
-/*
 #ifdef NDEBUG
 #define REAPERAPI_MINIMAL
+#define REAPERAPI_WANT_GetMediaTrackInfo_Value
 #define REAPERAPI_WANT_GetSelectedTrack2
+#define REAPERAPI_WANT_GetTrackName
 #define REAPERAPI_WANT_ShowConsoleMsg
 #define REAPERAPI_WANT_TrackFX_GetCount
 #define REAPERAPI_WANT_TrackFX_GetFXGUID
@@ -18,13 +19,13 @@
 #define REAPERAPI_WANT_plugin_getapi
 #define REAPERAPI_WANT_plugin_register
 #endif
- */
+
 #define REAPERAPI_IMPLEMENT
 #include <reaper_plugin_functions.h>
 #define REAIMGUIAPI_IMPLEMENT
 #include <reaper_imgui_functions.h>
 
-#include "ReaFab.hpp"
+#include "reafab.hpp"
 
 extern "C" {
 REAPER_PLUGIN_DLL_EXPORT int ReaperPluginEntry(
