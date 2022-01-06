@@ -1,4 +1,3 @@
-reaper.Fab_Clear()
 reaper.Fab_Map("Pro-C 2", 1, "Threshold", 1, nil, nil, 3.000000, nil, nil)
 reaper.Fab_Map("Pro-C 2", 2, "Ratio", 1, nil, nil, 3.000000, nil, nil)
 reaper.Fab_Map("Pro-C 2", 3, "Attack", 1, nil, nil, 3.000000, nil, nil)
