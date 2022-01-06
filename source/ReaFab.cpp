@@ -777,7 +777,7 @@ static void ImGuiFrame()
         for (int column = 1; column < 9; column++) {
             ImGui_TableSetColumnIndex(ctx, column);
             text = std::string("fx") + std::to_string(column);
-            if (fxIndices.size() > column - 1) {
+            if ((int)fxIndices.size() > column - 1) {
                 TrackFX_GetFXName(track, fxIndices[column - 1], bufOut, BUFSIZ);
                 text = text + std::string(": ");
                 text = text + std::string(bufOut);
