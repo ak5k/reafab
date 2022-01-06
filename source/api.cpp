@@ -11,6 +11,79 @@ static bool Do(int command, int val)
     return true;
 }
 
+void Dump()
+{
+    tm ltm;
+    time_t now = time(0);
+    localtime_s(&ltm, &now);
+    ControlTarget temp;
+    std::string delimit(", ");
+    std::string path(GetResourcePath());
+    path += std::string("/Scripts/reafab_dump-");
+    path += std::to_string(ltm.tm_year + 1900);
+    path += std::string("-");
+    path += std::to_string(ltm.tm_mon + 1);
+    path += std::string("-");
+    path += std::to_string(ltm.tm_mday);
+    path += std::string("-");
+    path += std::to_string(ltm.tm_hour);
+    path += std::to_string(ltm.tm_min);
+    path += std::to_string(ltm.tm_sec);
+    path += std::string(".lua");
+    std::ofstream file;
+    file.open(path.c_str());
+    for (auto&& i : controlMap) {
+        for (auto&& j : i.second) {
+            std::string line("reaper.Fab_Map(\"");
+            line += i.first + std::string("\"") + delimit;
+            line += std::to_string(j.first) + delimit;
+            line += std::string("\"") + j.second.paramId + std::string("\"") +
+                    delimit;
+            line += std::to_string(j.second.control) + delimit;
+            if (j.second.bands == 0) {
+                line += std::string("nil") + delimit;
+            }
+            else {
+                line += std::to_string(j.second.bands) + delimit;
+            }
+            if (j.second.step == temp.step) {
+                line += std::string("nil") + delimit;
+            }
+            else {
+                line += std::to_string(j.second.step) + delimit;
+            }
+            if (j.second.accel == temp.accel) {
+                line += std::string("nil") + delimit;
+            }
+            else {
+                line += std::to_string(j.second.accel) + delimit;
+            }
+            if (j.second.minval == temp.minval) {
+                line += std::string("nil") + delimit;
+            }
+            else {
+                line += std::to_string(j.second.minval) + delimit;
+            }
+            if (j.second.maxval == temp.maxval) {
+                line += std::string("nil");
+            }
+            else {
+                line += std::to_string(j.second.maxval);
+            }
+            line += std::string(")");
+            file << line.c_str();
+            file << "\n";
+        }
+    }
+    file.close();
+    return;
+}
+
+const char* defstring_Dump =
+    "void\0\0\0"
+    "Dumps current control mapping into .lua file under "
+    "ResourcePath/Scripts/reafab_dump-timestamp.lua";
+
 const char* defstring_Do =
     "bool\0int,int\0command,val\0"
     "Runs ReaFab actions/commands. First "
@@ -241,8 +314,20 @@ void Register(bool load)
         plugin_register(
             "APIvararg_Fab_Clear",
             reinterpret_cast<void*>(&InvokeReaScriptAPI<&Clear>));
+
+        plugin_register("API_Fab_Dump", (void*)Dump);
+        plugin_register("APIdef_Fab_Dump", (void*)defstring_Dump);
+        plugin_register(
+            "APIvararg_Fab_Dump",
+            reinterpret_cast<void*>(&InvokeReaScriptAPI<&Dump>));
     }
     else {
+        plugin_register("-API_Fab_Dump", (void*)Dump);
+        plugin_register("-APIdef_Fab_Dump", (void*)defstring_Dump);
+        plugin_register(
+            "-APIvararg_Fab_Dump",
+            reinterpret_cast<void*>(&InvokeReaScriptAPI<&Dump>));
+
         plugin_register("-API_Fab_Get", (void*)Get);
         plugin_register("-APIdef_Fab_Get", (void*)defstring_Get);
         plugin_register(

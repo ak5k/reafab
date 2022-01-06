@@ -1,6 +1,7 @@
 #ifdef NDEBUG
 #define REAPERAPI_MINIMAL
 #define REAPERAPI_WANT_GetMediaTrackInfo_Value
+#define REAPERAPI_WANT_GetResourcePath
 #define REAPERAPI_WANT_GetSelectedTrack2
 #define REAPERAPI_WANT_GetTrackName
 #define REAPERAPI_WANT_ShowConsoleMsg
