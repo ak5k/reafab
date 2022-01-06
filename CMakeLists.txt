@@ -108,7 +108,7 @@ target_include_directories(
   ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
 if(WIN32)
   target_compile_options(common INTERFACE
-    /W3 
+    /W3 /wd4996
     /WX
     )
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)

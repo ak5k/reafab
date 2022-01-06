@@ -13,22 +13,18 @@ static bool Do(int command, int val)
 
 void Dump()
 {
-    tm ltm;
-    time_t now = time(0);
-    localtime_s(&ltm, &now);
+    std::time_t rawtime;
+    std::tm* timeinfo;
+    char buffer[80];
+    std::time(&rawtime);
+    timeinfo = std::localtime(&rawtime);
+    std::strftime(buffer, 80, "%Y%m%d-%H%M%S", timeinfo);
+
     ControlTarget temp;
     std::string delimit(", ");
     std::string path(GetResourcePath());
     path += std::string("/Scripts/reafab_dump-");
-    path += std::to_string(ltm.tm_year + 1900);
-    path += std::string("-");
-    path += std::to_string(ltm.tm_mon + 1);
-    path += std::string("-");
-    path += std::to_string(ltm.tm_mday);
-    path += std::string("-");
-    path += std::to_string(ltm.tm_hour);
-    path += std::to_string(ltm.tm_min);
-    path += std::to_string(ltm.tm_sec);
+    path += std::string(buffer);
     path += std::string(".lua");
     std::ofstream file;
     file.open(path.c_str());
