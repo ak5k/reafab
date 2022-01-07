@@ -60,6 +60,16 @@ static void ImGuiFrame()
                 if (currentControlMap[row * 8 + column].paramId.empty()) {
                     text = std::string("");
                 }
+                if (currentControlMap[row * 8 + column].control == 4) {
+                    text = std::string("(invert)") + text;
+                }
+                if (currentControlMap[row * 8 + column].control == 3) {
+                    text = std::string("(cycle)") + text;
+                }
+                if (currentControlMap[row * 8 + column].control == 5 ||
+                    currentControlMap[row * 8 + column].control == 7) {
+                    text = std::string("(toggle)") + text;
+                }
                 if (column == 0) {
                     if (row == 0) {
                         text = std::string("enc1-8: ");

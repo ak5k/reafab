@@ -8,7 +8,7 @@ A REAPER extension to emulate digital console type of workflow for setting chann
 * Can be controlled and configured via ReaScript API. 
 * Plug-in support can be extended practically endlessly with ReaScripting. See ```scripts``` folder for example. 
 * Scripts can function purely as custom config files, programmatically control of ReaFab itself, or both. Can be expanded to 'infinite page' controller by ReaScripting, e.g. switching between different ReaFab configurations.
-* ReaScript API functions ```reaper.Fab_{Do, Get, Map, Clear}``` for giving direct control input, getting absolute target plugin index and parameter and creating new and clearing control maps.
+* ReaScript API functions ```reaper.Fab_{Do, Dump, Get, Map, Clear}``` for giving direct control input, dumping control map into file, getting absolute target plugin index and parameter and creating new and clearing control maps.
 * If [ReaImGui](https://github.com/cfillion/reaimgui) is installed, registers ReaFab Monitor action. It opens up a small monitor window showing current control map for selected plugin on selected track.
 
 ### Installation and recommendations
