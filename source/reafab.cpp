@@ -220,9 +220,8 @@ void Initialize()
     for (int i = 0; i < TrackFX_GetCount(track); i++) {
         TrackFX_GetFXName(track, i, bufOut, BUFSIZ);
         std::string fx_name(bufOut);
-        for (const auto& [key, value] : controlMap) {
-            (void)value;
-            if (fx_name.find(key) != std::string::npos) {
+        for (const auto& j : controlMap) {
+            if (fx_name.find(j.first) != std::string::npos) {
                 fxIndices.push_back(i);
             }
         }
