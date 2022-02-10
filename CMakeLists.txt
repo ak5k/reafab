@@ -102,7 +102,7 @@ endif()
 
 add_library(common INTERFACE)
 target_include_directories(
-  common INTERFACE
+  common SYSTEM INTERFACE
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/vendor 
   ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
@@ -114,11 +114,8 @@ if(WIN32)
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
 else()
   target_compile_options(common INTERFACE
-    -Wall -Wextra -Werror
-    -Wno-unused-parameter -Wno-missing-field-initializers
-    -Wno-unused-function -Wno-missing-braces
+    -Wall -Wextra -Werror -Wpedantic
   )
-
 
   # Clang 11
   check_compiler_flag(CXX -Wnon-c-typedef-for-linkage HAVE_NON_C_TYPEDEF_FOR_LINKAGE)
