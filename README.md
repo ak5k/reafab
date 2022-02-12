@@ -1,6 +1,6 @@
 # ReaFab
 
-## Fabulous REAPER contextual plug-in controller and API extension
+## Fabulous REAPER plug-in controller extension
 
 A REAPER extension to emulate digital console type of workflow for setting channelstrip plugin parameters in the context of currently selected track/channel. Registers 32 custom actions which function as kind of API based virtual control surface, or 'dynamic' macro controls. Similar to Quick Controls in Cubase, except allows for e.g. switching EQ bands as 'pages'. 8 endless rotary encoders in MIDI Relative mode and 24 buttons are supported, and in practice required. 8 buttons are reserved for navigating the 'virtual channelstrip'. Built-in support for some [FabFilter](https://www.fabfilter.com)s, the [ReEQ](https://forum.cockos.com/showthread.php?t=213501) and some stock REAPER plugins.
 
