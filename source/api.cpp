@@ -196,7 +196,7 @@ bool Map(
         currentControlTarget.minval = *minvalInOptional;
     }
     if (maxvalInOptional) {
-        currentControlTarget.maxval = *minvalInOptional;
+        currentControlTarget.maxval = *maxvalInOptional;
     }
     if (stepInOptional) {
         currentControlTarget.step = *stepInOptional;
