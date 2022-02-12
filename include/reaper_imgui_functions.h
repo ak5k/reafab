@@ -1,4 +1,4 @@
-// Generated for ReaImGui v0.5.8
+// Generated for ReaImGui v0.5.10
 
 #ifndef REAPER_IMGUI_FUNCTIONS_H
 #define REAPER_IMGUI_FUNCTIONS_H
@@ -313,6 +313,8 @@ REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx)> ImGui_EndTable REAIMGU
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx)> ImGui_EndTooltip REAIMGUIAPI_INIT("ImGui_EndTooltip");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_AnyWindow REAIMGUIAPI_INIT("ImGui_FocusedFlags_AnyWindow");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_ChildWindows REAIMGUIAPI_INIT("ImGui_FocusedFlags_ChildWindows");
+REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_DockHierarchy REAIMGUIAPI_INIT("ImGui_FocusedFlags_DockHierarchy");
+REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_NoPopupHierarchy REAIMGUIAPI_INIT("ImGui_FocusedFlags_NoPopupHierarchy");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_None REAIMGUIAPI_INIT("ImGui_FocusedFlags_None");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_RootAndChildWindows REAIMGUIAPI_INIT("ImGui_FocusedFlags_RootAndChildWindows");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_FocusedFlags_RootWindow REAIMGUIAPI_INIT("ImGui_FocusedFlags_RootWindow");
@@ -348,6 +350,7 @@ REAIMGUIAPI_EXTERN ReaImGuiFunc<double(ImGui_Context* ctx, int key_code)> ImGui_
 REAIMGUIAPI_EXTERN ReaImGuiFunc<int(ImGui_Context* ctx)> ImGui_GetKeyMods REAIMGUIAPI_INIT("ImGui_GetKeyMods");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<int(ImGui_Context* ctx, int key_index, double repeat_delay, double rate)> ImGui_GetKeyPressedAmount REAIMGUIAPI_INIT("ImGui_GetKeyPressedAmount");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<ImGui_Viewport*(ImGui_Context* ctx)> ImGui_GetMainViewport REAIMGUIAPI_INIT("ImGui_GetMainViewport");
+REAIMGUIAPI_EXTERN ReaImGuiFunc<int(ImGui_Context* ctx, int button)> ImGui_GetMouseClickedCount REAIMGUIAPI_INIT("ImGui_GetMouseClickedCount");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, int button, double* xOut, double* yOut)> ImGui_GetMouseClickedPos REAIMGUIAPI_INIT("ImGui_GetMouseClickedPos");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<int(ImGui_Context* ctx)> ImGui_GetMouseCursor REAIMGUIAPI_INIT("ImGui_GetMouseCursor");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, double* xOut, double* yOut)> ImGui_GetMouseDelta REAIMGUIAPI_INIT("ImGui_GetMouseDelta");
@@ -370,7 +373,6 @@ REAIMGUIAPI_EXTERN ReaImGuiFunc<double(ImGui_Context* ctx)> ImGui_GetTreeNodeToL
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(char* imgui_versionOut, int imgui_versionOut_sz, char* reaimgui_versionOut, int reaimgui_versionOut_sz)> ImGui_GetVersion REAIMGUIAPI_INIT("ImGui_GetVersion");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, double* xOut, double* yOut)> ImGui_GetWindowContentRegionMax REAIMGUIAPI_INIT("ImGui_GetWindowContentRegionMax");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, double* xOut, double* yOut)> ImGui_GetWindowContentRegionMin REAIMGUIAPI_INIT("ImGui_GetWindowContentRegionMin");
-REAIMGUIAPI_EXTERN ReaImGuiFunc<double(ImGui_Context* ctx)> ImGui_GetWindowContentRegionWidth REAIMGUIAPI_INIT("ImGui_GetWindowContentRegionWidth");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<int(ImGui_Context* ctx)> ImGui_GetWindowDockID REAIMGUIAPI_INIT("ImGui_GetWindowDockID");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<ImGui_DrawList*(ImGui_Context* ctx)> ImGui_GetWindowDrawList REAIMGUIAPI_INIT("ImGui_GetWindowDrawList");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<double(ImGui_Context* ctx)> ImGui_GetWindowHeight REAIMGUIAPI_INIT("ImGui_GetWindowHeight");
@@ -383,6 +385,8 @@ REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_AllowWhenDisabled REAIMGUIAPI
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_AllowWhenOverlapped REAIMGUIAPI_INIT("ImGui_HoveredFlags_AllowWhenOverlapped");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_AnyWindow REAIMGUIAPI_INIT("ImGui_HoveredFlags_AnyWindow");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_ChildWindows REAIMGUIAPI_INIT("ImGui_HoveredFlags_ChildWindows");
+REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_DockHierarchy REAIMGUIAPI_INIT("ImGui_HoveredFlags_DockHierarchy");
+REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_NoPopupHierarchy REAIMGUIAPI_INIT("ImGui_HoveredFlags_NoPopupHierarchy");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_None REAIMGUIAPI_INIT("ImGui_HoveredFlags_None");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_RectOnly REAIMGUIAPI_INIT("ImGui_HoveredFlags_RectOnly");
 REAIMGUIAPI_EXTERN ReaImGuiEnum ImGui_HoveredFlags_RootAndChildWindows REAIMGUIAPI_INIT("ImGui_HoveredFlags_RootAndChildWindows");
@@ -457,6 +461,7 @@ REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, const char* label, cons
 REAIMGUIAPI_EXTERN ReaImGuiFunc<bool(ImGui_Context* ctx, const char* label, int* current_itemInOut, char* items, int* height_in_itemsInOptional)> ImGui_ListBox REAIMGUIAPI_INIT("ImGui_ListBox");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_ListClipper* clipper, int items_count, double* items_heightInOptional)> ImGui_ListClipper_Begin REAIMGUIAPI_INIT("ImGui_ListClipper_Begin");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_ListClipper* clipper)> ImGui_ListClipper_End REAIMGUIAPI_INIT("ImGui_ListClipper_End");
+REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_ListClipper* clipper, int item_min, int item_max)> ImGui_ListClipper_ForceDisplayRangeByIndices REAIMGUIAPI_INIT("ImGui_ListClipper_ForceDisplayRangeByIndices");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_ListClipper* clipper, int* display_startOut, int* display_endOut)> ImGui_ListClipper_GetDisplayRange REAIMGUIAPI_INIT("ImGui_ListClipper_GetDisplayRange");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<bool(ImGui_ListClipper* clipper)> ImGui_ListClipper_Step REAIMGUIAPI_INIT("ImGui_ListClipper_Step");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx)> ImGui_LogFinish REAIMGUIAPI_INIT("ImGui_LogFinish");
@@ -564,6 +569,7 @@ REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, double size_w, double s
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, const char* name, double size_w, double size_h, int* condInOptional)> ImGui_SetWindowSizeEx REAIMGUIAPI_INIT("ImGui_SetWindowSizeEx");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, bool* p_openInOutOptional)> ImGui_ShowAboutWindow REAIMGUIAPI_INIT("ImGui_ShowAboutWindow");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, bool* p_openInOutOptional)> ImGui_ShowMetricsWindow REAIMGUIAPI_INIT("ImGui_ShowMetricsWindow");
+REAIMGUIAPI_EXTERN ReaImGuiFunc<void(ImGui_Context* ctx, bool* p_openInOutOptional)> ImGui_ShowStackToolWindow REAIMGUIAPI_INIT("ImGui_ShowStackToolWindow");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<bool(ImGui_Context* ctx, const char* label, double* v_radInOut, double* v_degrees_minInOptional, double* v_degrees_maxInOptional, const char* formatInOptional, int* flagsInOptional)> ImGui_SliderAngle REAIMGUIAPI_INIT("ImGui_SliderAngle");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<bool(ImGui_Context* ctx, const char* label, double* vInOut, double v_min, double v_max, const char* formatInOptional, int* flagsInOptional)> ImGui_SliderDouble REAIMGUIAPI_INIT("ImGui_SliderDouble");
 REAIMGUIAPI_EXTERN ReaImGuiFunc<bool(ImGui_Context* ctx, const char* label, double* v1InOut, double* v2InOut, double v_min, double v_max, const char* formatInOptional, int* flagsInOptional)> ImGui_SliderDouble2 REAIMGUIAPI_INIT("ImGui_SliderDouble2");

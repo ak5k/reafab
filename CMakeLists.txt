@@ -4,6 +4,14 @@ project(reaper_reafab LANGUAGES CXX)
 include(CheckCompilerFlag)
 include(CheckIncludeFileCXX)
 include(CheckLinkerFlag)
+include(FindGit)
+
+if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk)
+    execute_process(
+      COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1 
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+      )
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -83,7 +91,7 @@ if(WIN32)
     $<$<NOT:$<CONFIG:Debug>>:/OPT:ICF>
 
     # Use relative path to the PDB file to avoid exposing the full path
-    # /PDBALTPATH:%_PDB%
+    /PDBALTPATH:%_PDB%
   )
 else()
   add_compile_options(
@@ -108,7 +116,7 @@ target_include_directories(
   ${CMAKE_SOURCE_DIR}/vendor/reaper-sdk/sdk)
 if(WIN32)
   target_compile_options(common INTERFACE
-    /W3 /wd4996
+    /W4 /wd4100 /wd4505 /wd4706 /wd4996
     /WX
     )
   target_compile_definitions(common INTERFACE NOMINMAX UNICODE)
@@ -147,29 +155,6 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION "${REAPER_USER_PLUGINS}" # Windows .dll
   LIBRARY DESTINATION "${REAPER_USER_PLUGINS}" # Linux .so/macOS .dylib
 )
-
-# if(UNIX AND NOT APPLE)
-#   set(THREADS_PREFER_PTHREAD_FLAG ON)
-#   find_package(Threads REQUIRED)
-#   target_link_libraries(${PROJECT_NAME} Threads::Threads)
-# endif()
-
-if(NOT WIN32)
-if(NOT EXISTS ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL)
-    file(REMOVE
-        ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
-    )
-    find_package(Git QUIET)
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-    if(NOT CMAKE_SYSTEM_NAME MATCHES Windows)
-        file(CREATE_LINK
-            ${PROJECT_SOURCE_DIR}/vendor/WDL/WDL
-            ${PROJECT_SOURCE_DIR}/vendor/reaper-sdk/WDL
-            SYMBOLIC)
-    endif()
-endif()
-endif()
 
 if (MSVC AND CMAKE_BUILD_TYPE MATCHES RELEASE)
     set_target_properties( ${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )

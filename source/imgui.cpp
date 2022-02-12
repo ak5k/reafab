@@ -56,32 +56,33 @@ static void ImGuiFrame()
             ImGui_TableNextRow(ctx);
             for (int column = 0; column < 9; column++) {
                 ImGui_TableSetColumnIndex(ctx, column);
-                std::string text = currentControlMap[row * 8 + column].paramId;
+                std::string textTable =
+                    currentControlMap[row * 8 + column].paramId;
                 if (currentControlMap[row * 8 + column].paramId.empty()) {
-                    text = std::string("");
+                    textTable = std::string("");
                 }
                 if (currentControlMap[row * 8 + column].control == 4) {
-                    text = std::string("(invert)") + text;
+                    textTable = std::string("(invert)") + textTable;
                 }
                 if (currentControlMap[row * 8 + column].control == 3) {
-                    text = std::string("(cycle)") + text;
+                    textTable = std::string("(cycle)") + textTable;
                 }
                 if (currentControlMap[row * 8 + column].control == 5 ||
                     currentControlMap[row * 8 + column].control == 7) {
-                    text = std::string("(toggle)") + text;
+                    textTable = std::string("(toggle)") + textTable;
                 }
                 if (column == 0) {
                     if (row == 0) {
-                        text = std::string("enc1-8: ");
+                        textTable = std::string("enc1-8: ");
                     }
                     if (row == 1) {
-                        text = std::string("encp1-8: ");
+                        textTable = std::string("encp1-8: ");
                     }
                     if (row == 2) {
-                        text = std::string("b1-8: ");
+                        textTable = std::string("b1-8: ");
                     }
                 }
-                ImGui_Text(ctx, text.c_str());
+                ImGui_Text(ctx, textTable.c_str());
             }
         }
         ImGui_TableSetColumnIndex(ctx, 0);
