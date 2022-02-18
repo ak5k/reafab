@@ -13,6 +13,7 @@ static bool Do(int command, int val)
 
 void Dump()
 {
+    std::scoped_lock<std::mutex> lock {m};
     std::time_t rawtime;
     std::tm* timeinfo;
     char buffer[80];
@@ -140,6 +141,7 @@ const char* defstring_Get =
 
 static bool Clear(const char* idStringInOptional)
 {
+    std::scoped_lock<std::mutex> lock {m};
     std::string s {idStringInOptional};
     if (s.empty()) {
         controlMap.clear();
@@ -176,6 +178,7 @@ bool Map(
         control > NUMCONTROLTYPES) {
         return false;
     }
+    std::scoped_lock<std::mutex> lk {m};
     std::string fxIdString {fxId};
     ControlTarget currentControlTarget;
     currentControlTarget.paramId = std::string(paramId);
