@@ -135,7 +135,7 @@ void MapPlugins()
 
     tempMap.clear();
     id = "ReaComp";
-    tempMap[1] = ControlTarget {"Thresh", 1};
+    tempMap[1] = ControlTarget {"Threshold", 1};
     tempMap[2] = ControlTarget {"Ratio", 1};
     tempMap[3] = ControlTarget {"Attack", 1};
     tempMap[4] = ControlTarget {"Release", 1};
@@ -143,8 +143,8 @@ void MapPlugins()
     tempMap[6] = ControlTarget {"RMS size", 1};
     tempMap[7] = ControlTarget {"Dry", 1};
     tempMap[8] = ControlTarget {"Wet", 1};
-    tempMap[17] = ControlTarget {"AutoMkUp", 1};
-    tempMap[18] = ControlTarget {"AutoRel", 1};
+    tempMap[17] = ControlTarget {"Auto Make Up Gain", 1};
+    tempMap[18] = ControlTarget {"Auto Release", 1};
     for (auto&& i : tempMap) {
         i.second.step = i.second.step * 2;
     }
@@ -159,15 +159,15 @@ void MapPlugins()
 
     tempMap.clear();
     id = "ReaGate";
-    tempMap[1] = ControlTarget {"Thresh", 1};
+    tempMap[1] = ControlTarget {"Threshold", 1};
     tempMap[2] = ControlTarget {"Hold", 1};
     tempMap[3] = ControlTarget {"Attack", 1};
     tempMap[4] = ControlTarget {"Release", 1};
-    tempMap[5] = ControlTarget {"Hystrsis", 1};
+    tempMap[5] = ControlTarget {"Hysteresis", 1};
     tempMap[6] = ControlTarget {"RMS size", 1};
     tempMap[7] = ControlTarget {"Dry", 1};
     tempMap[8] = ControlTarget {"Wet", 1};
-    tempMap[17] = ControlTarget {"InvrtWet", 5};
+    tempMap[17] = ControlTarget {"Invert Wet", 5};
     for (auto&& i : tempMap) {
         i.second.step = i.second.step * 2;
     }
@@ -176,19 +176,19 @@ void MapPlugins()
     tempMap.clear();
     bands = 24;
     id = "ReaXcomp";
-    tempMap[1] = ControlTarget {"00-Thresh", 1, bands};
+    tempMap[1] = ControlTarget {"00-Threshold", 1, bands};
     tempMap[2] = ControlTarget {"00-Ratio", 1, bands};
     tempMap[3] = ControlTarget {"00-Attack", 1, bands};
     tempMap[4] = ControlTarget {"00-Release", 1, bands};
     tempMap[5] = ControlTarget {"00-Knee", 1, bands};
     tempMap[6] = ControlTarget {"00-RMS", 1, bands};
-    tempMap[7] = ControlTarget {"00-Freq", 1, bands};
+    tempMap[7] = ControlTarget {"00-Band top frequency", 1, bands};
     tempMap[9] = ControlTarget {"00-Active", 5, bands};
     tempMap[17] = ControlTarget {"-band", 2, bands};
     tempMap[18] = ControlTarget {"band", 2, bands};
-    tempMap[19] = ControlTarget {"00-MakeUp", 5, bands};
-    tempMap[20] = ControlTarget {"00-AutoRel", 5, bands};
-    tempMap[21] = ControlTarget {"00-FeedBk", 5, bands};
+    tempMap[19] = ControlTarget {"00-Make Up Gain", 5, bands};
+    tempMap[20] = ControlTarget {"00-Auto Release", 5, bands};
+    tempMap[21] = ControlTarget {"00-FeedBack Detector", 5, bands};
     for (auto&& i : tempMap) {
         i.second.step = i.second.step * 2;
     }
