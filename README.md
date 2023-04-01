@@ -16,7 +16,7 @@ A REAPER extension to emulate digital console type of workflow for setting chann
 ### Installation and recommendations
 
 - Install platform specific library file into REAPER UserPlugins directory.
-- Set hardware MIDI controller encoders to MIDI Relative. E.g. in X-Touch Mini, set Encoder minval to Relative1.
+- Set hardware MIDI controller encoders to MIDI Relative. E.g. in X-Touch Mini, set Encoder minval to Relative1. With Akai MPK series (those with endless encoders) use INC/DEC2 mode.
 - Map corresponding MIDI controls to ReaFab actions. Encoders in Relative mode.
 - Using native REAPER actions to navigate tracks will 'increase productivity'.
 - Configure REAPER to 'Only allow one FX chain window open at a time, Open track FX window on track change, Only if any FX window is open'. Otherwise screen will get cluttered.
