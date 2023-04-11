@@ -21,6 +21,4 @@ A REAPER extension to emulate digital console type of workflow for setting chann
 - Using native REAPER actions to navigate tracks will 'increase productivity'.
 - Configure REAPER to 'Only allow one FX chain window open at a time, Open track FX window on track change, Only if any FX window is open'. Otherwise screen will get cluttered.
 
-[More information](https://forum.cockos.com/showthread.php?t=261330)
-
 ![image](https://i.imgur.com/bAVdj05.gif)
